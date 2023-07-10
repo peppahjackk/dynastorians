@@ -4,5 +4,9 @@
   "main": "index.js",
   "repository": "git@github.com:peppahjackk/dynastorians.git",
   "author": "Ted Moke <iam@tedmoke.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.3.2"
+  }
 }
