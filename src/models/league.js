@@ -24,6 +24,16 @@ const leagueSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  dateUpdated: {
+    type: Date,
+    required: true,
+    default: Date.now
+  },
+  status: {
+    type: String,
+    enum: ['Idle', 'Syncing', 'Error'],
+    default: "Idle"
+  },
   externalSystem: {
     type: String,
     required: true,
