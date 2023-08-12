@@ -11,15 +11,10 @@ const leagueSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  participants: {
-    type: [String],
-    required: true
-  },
-  scoringSystem: {
-    type: String,
-    enum: ['Standard', 'Half_PPR', 'PPR', 'Superflex', 'SFTEP'],
-    default: 'Superflex'
-  },
+  // teamIds: {
+  //   type: [String],
+  //   required: true
+  // },
   externalLeagueId: {
     type: String,
     required: true,
