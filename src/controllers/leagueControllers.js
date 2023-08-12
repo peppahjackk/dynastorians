@@ -35,7 +35,7 @@ exports.createLeague = async (req, res) => {
 };
 
 exports.connectLeague = async (req, res) => {
-  const { externalLeagueId } = req.body;
+  const { externalLeagueId, externalSystem = 'fleaflicker' } = req.body;
   try {
     const exists = await leagueService.checkLeagueExists(externalLeagueId);
     if (exists) {
@@ -45,6 +45,9 @@ exports.connectLeague = async (req, res) => {
       // This will be implemented in the future steps.
       res.json({ message: `League with external ID ${externalLeagueId} is not connected. Starting league sync...` });
       // Start league sync...
+      const newLeague = new LeagueSyncService({externalLeagueId, externalSystem})
+      const newLeagueData = newLeague.fetchLeagueDataFromAPI();
+      res.status(200).json(newLeagueData)
     }
   } catch (error) {
     res.status(500).send({ message: `Error: ${error.message}` });

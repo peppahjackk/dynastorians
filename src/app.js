@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const leagueRoutes = require('./routes/leagueRoutes');
+const leagueSyncRoutes = require('./routes/leagueSyncRoutes');
 
 // Create an instance of Express
 const app = express();
@@ -11,6 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/leagues', leagueRoutes);
+app.use('/leagueSync', leagueSyncRoutes);
 
 // Basic route for testing
 app.get('/', (req, res) => {
