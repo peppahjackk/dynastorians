@@ -1,17 +1,5 @@
-const axios = require('axios');
 const League = require('../models/league');
-
-const getUserFromFleaflicker = async (credentials) => {
-  try {
-    const response = await axios.get(
-      `https://www.fleaflicker.com/api/FetchUserLeagues?sport=NFL&email=${credentials.email}`
-    );
-    const user = response.data;
-    return user;
-  } catch (error) {
-    throw new Error("Error getting user from external system" + error.message);
-  }
-};
+const { getUserFromFleaflicker, getLeagueFromFleaflicker } = require('../utils/fleaflicker');
 
 exports.createLeague = async (leagueData) => {
   try {
@@ -55,3 +43,18 @@ exports.getExternalLeaguesForUser = async (externalUserData) => {
     throw new Error("Error getting user from external system" + error.message);
   }
 };
+
+exports.getExternalRosters = async (externalLeagueData) => {
+  try {
+    const { externalSystem, id } = externalLeagueData;
+
+    let externalLeague;
+    if (externalSystem === "fleaflicker") {
+      externalLeague = await getLeagueFromFleaflicker(id);
+    }
+
+    return externalLeague;
+  } catch (error) {
+    throw new Error("Error getting user from external system" + error.message);
+  }
+}

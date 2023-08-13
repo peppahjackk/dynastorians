@@ -32,8 +32,7 @@ const leagueSchema = new mongoose.Schema({
   externalSystem: {
     type: String,
     required: true,
-    enum: ['Sleeper', 'Fleaflicker'],
-    default: 'Sleeper'
+    enum: ['sleeper', 'fleaflicker'],
   },
 });
 

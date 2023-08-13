@@ -4,8 +4,8 @@ const leagueController = require("../controllers/leagueControllers");
 
 router.get("/leagues", leagueController.getLeagueById);
 router.get("/", leagueController.getAllLeagues);
-router.post("/", leagueController.createLeague);
 router.get("/external", leagueController.getExternalLeagues);
+router.post("/connect", leagueController.connectLeague);
 
 // define more routes related to leagues...
 

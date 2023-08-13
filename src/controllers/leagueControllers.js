@@ -49,3 +49,26 @@ exports.getExternalLeagues = async (req, res) => {
     });
   }
 };
+
+exports.connectLeague = async (req, res) => {
+  const { externalSystem, id, sport, name } = req.body;
+  try {
+    const rosterData = await leagueService.getExternalRosters({
+      externalSystem,
+      id,
+    });
+    const newLeague = await leagueService.createLeague({
+      externalLeagueId: id,
+      externalSystem,
+      sport,
+      name,
+    });
+    res.status(201).json(newLeague);
+  } catch (error) {
+    res.status(500).send({
+      error:
+        "An error occurred while connecting the user to the external system" +
+        error.message,
+    });
+  }
+};
