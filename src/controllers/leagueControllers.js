@@ -1,4 +1,4 @@
-const leagueService = require('../services/leagueService');
+const leagueService = require("../services/leagueService");
 
 // get all leagues
 exports.getAllLeagues = async (req, res) => {
@@ -17,7 +17,7 @@ exports.getLeagueById = async (req, res) => {
     if (league) {
       res.json(league);
     } else {
-      res.status(404).send({ message: 'League not found' });
+      res.status(404).send({ message: "League not found" });
     }
   } catch (error) {
     res.status(500).send({ message: `Error: ${error.message}` });
@@ -34,22 +34,18 @@ exports.createLeague = async (req, res) => {
   }
 };
 
-exports.connectLeague = async (req, res) => {
-  const { externalLeagueId, externalSystem = 'fleaflicker' } = req.body;
+exports.getExternalLeagues = async (req, res) => {
+  const externalUserData = req.body;
   try {
-    const exists = await leagueService.checkLeagueExists(externalLeagueId);
-    if (exists) {
-      res.json({ message: `League with external ID ${externalLeagueId} is already connected.` });
-    } else {
-      // If the league does not exist in our database, we need to start a leagueSync.
-      // This will be implemented in the future steps.
-      res.json({ message: `League with external ID ${externalLeagueId} is not connected. Starting league sync...` });
-      // Start league sync...
-      const newLeague = new LeagueSyncService({externalLeagueId, externalSystem})
-      const newLeagueData = newLeague.fetchLeagueDataFromAPI();
-      res.status(200).json(newLeagueData)
-    }
+    const { leagues } = await leagueService.getExternalLeaguesForUser(
+      externalUserData
+    );
+    res.send(leagues);
   } catch (error) {
-    res.status(500).send({ message: `Error: ${error.message}` });
+    res.status(500).send({
+      error:
+        "An error occurred while connecting the user to the external system" +
+        error.message,
+    });
   }
 };

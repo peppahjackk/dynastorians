@@ -15,10 +15,10 @@ exports.connectLeague = async (req, res) => {
       // Start league sync...
       const newLeague = new LeagueSyncService({externalLeagueId, externalSystem})
       const newLeagueData = await newLeague.fetchLeagueDataFromAPI();
-      console.log('DATA boi: ', newLeagueData)
-      res.json(newLeagueData)
+      res.status(201).send(newLeagueData)
     }
   } catch (error) {
     res.status(500).send({ message: `Error: ${error.message}` });
   }
 };
+

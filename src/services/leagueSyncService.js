@@ -13,7 +13,7 @@ class LeagueSyncService {
 
   async fetchLeagueDataFromAPI() {
     try { 
-console.log('Attempting to fetch with league_id param ', this._externalLeagueId)
+      console.log('Attempting to fetch with league_id param ', this._externalLeagueId)
       const response = await this.apiClient.get(`/FetchLeagueRosters?sport=NFL&league_id=${this._externalLeagueId}`);
       return response.data;
     } catch (err) {

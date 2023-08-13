@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const leagueController = require('../controllers/leagueControllers');
+const leagueController = require("../controllers/leagueControllers");
 
-router.post('/connect', leagueController.connectLeague);
-router.get('/leagues', leagueController.getLeagueById);
-router.get('/', leagueController.getAllLeagues);
-router.post('/', leagueController.createLeague);
+router.get("/leagues", leagueController.getLeagueById);
+router.get("/", leagueController.getAllLeagues);
+router.post("/", leagueController.createLeague);
+router.get("/external", leagueController.getExternalLeagues);
 
 // define more routes related to leagues...
 
