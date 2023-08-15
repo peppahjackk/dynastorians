@@ -43,32 +43,35 @@ exports.getExternalLeagues = async (req, res) => {
     res.send(leagues);
   } catch (error) {
     res.status(500).send({
-      error:
-        "An error occurred while connecting the user to the external system" +
-        error.message,
+      error: `An error occurred while connecting the getting the external League: ${error.message}`,
     });
   }
 };
 
-exports.connectLeague = async (req, res) => {
-  const { externalSystem, id, sport, name } = req.body;
+exports.syncLeague = async (req, res) => {
+  const { externalSystem, id: externalLeagueId, sport, name } = req.body;
   try {
-    const rosterData = await leagueService.getExternalRosters({
-      externalSystem,
-      id,
-    });
-    const newLeague = await leagueService.createLeague({
-      externalLeagueId: id,
-      externalSystem,
-      sport,
-      name,
-    });
-    res.status(201).json(newLeague);
+    const exists = await leagueService.checkLeagueExists(externalLeagueId);
+    if (exists) {
+      res.json({
+        message: `League with external ID ${externalLeagueId} is already connected.`,
+      });
+    } else {
+      // If the league does not exist in our database, we need to connect it
+      const newLeague = await leagueService.createLeague({
+        externalLeagueId,
+        externalSystem,
+        sport,
+        name,
+      });
+      res.status(201).json(newLeague);
+    }
+    
+    // const updatedLeagueData = await leagueService.updateRosters(newLeague.id);
+    // res.status(201).json(updatedLeagueData);
   } catch (error) {
     res.status(500).send({
-      error:
-        "An error occurred while connecting the user to the external system" +
-        error.message,
+      error: `An error occurred while connecting the user to the external system: ${error.message}`,
     });
   }
 };

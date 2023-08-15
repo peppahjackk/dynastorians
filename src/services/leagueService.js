@@ -1,5 +1,5 @@
 const League = require('../models/league');
-const { getUserFromFleaflicker, getLeagueFromFleaflicker } = require('../utils/fleaflicker');
+const { getUserFromFF, getRostersFromFF } = require('../utils/fleaflicker');
 
 exports.createLeague = async (leagueData) => {
   try {
@@ -35,7 +35,7 @@ exports.getExternalLeaguesForUser = async (externalUserData) => {
 
     let externalUser;
     if (externalSystem === "fleaflicker") {
-      externalUser = await getUserFromFleaflicker(credentials);
+      externalUser = await getUserFromFF(credentials);
     }
 
     return externalUser;
@@ -50,7 +50,7 @@ exports.getExternalRosters = async (externalLeagueData) => {
 
     let externalLeague;
     if (externalSystem === "fleaflicker") {
-      externalLeague = await getLeagueFromFleaflicker(id);
+      externalLeague = await getRostersFromFF(id);
     }
 
     return externalLeague;

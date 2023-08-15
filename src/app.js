@@ -14,11 +14,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/leagues', leagueRoutes);
 app.use('/users', userRoutes);
 
-// Basic route for testing
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
-
 // Set up server to listen on a port
 const port = 3000;
 app.listen(port, () => {
