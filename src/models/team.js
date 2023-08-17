@@ -2,23 +2,19 @@
 const mongoose = require('mongoose');
 
 // Define the user schema
-const userSchema = new mongoose.Schema({
-  username: {
+const teamSchema = new mongoose.Schema({
+  league_id: {
     type: String,
     required: true
   },
-  email: {
-    type: String,
-    required: true
-  },
-  connectedTeams: {
+  roster_ids: {
     type: [String],
-    required: false
+    required: true
   },
 });
 
 // Create the user model using the schema
-const User = mongoose.model('User', userSchema);
+const Team = mongoose.model('Team', teamSchema);
 
 // Export the User model
-module.exports = User;
+module.exports = Team;

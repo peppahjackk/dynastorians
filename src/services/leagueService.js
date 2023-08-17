@@ -1,5 +1,5 @@
 const League = require('../models/league');
-const { getUserFromFF, getRostersFromFF } = require('../utils/fleaflicker');
+const { getUserFromFF } = require('../utils/fleaflicker');
 
 exports.createLeague = async (leagueData) => {
   try {
@@ -43,18 +43,3 @@ exports.getExternalLeaguesForUser = async (externalUserData) => {
     throw new Error("Error getting user from external system" + error.message);
   }
 };
-
-exports.getExternalRosters = async (externalLeagueData) => {
-  try {
-    const { externalSystem, id } = externalLeagueData;
-
-    let externalLeague;
-    if (externalSystem === "fleaflicker") {
-      externalLeague = await getRostersFromFF(id);
-    }
-
-    return externalLeague;
-  } catch (error) {
-    throw new Error("Error getting user from external system" + error.message);
-  }
-}
