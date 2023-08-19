@@ -49,7 +49,7 @@ exports.getExternalLeagues = async (req, res) => {
 };
 
 exports.syncLeague = async (req, res) => {
-  const { externalSystem, id: externalLeagueId, sport, name } = req.body;
+  const { id: externalLeagueId, externalSystem } = req.body;
   try {
     const exists = await leagueService.checkLeagueExists(externalLeagueId);
     if (exists) {
@@ -62,7 +62,6 @@ exports.syncLeague = async (req, res) => {
         externalLeagueId,
         externalSystem,
         sport,
-        name,
       });
       res.status(201).json(newLeague);
     }
