@@ -7,8 +7,8 @@ const teamSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  roster_ids: {
-    type: [String],
+  external_team_id: {
+    type: String,
     required: true
   },
 });

@@ -11,10 +11,10 @@ exports.createLeague = async (leagueData) => {
   }
 };
 
-exports.checkLeagueExists = async (externalLeagueId) => {
+exports.getLeague = async (externalLeagueId) => {
   try {
     const league = await League.findOne({ externalLeagueId });
-    return league ? true : false;
+    return league;
   } catch (error) {
     throw error;
   }

@@ -1,28 +1,40 @@
 // Import the required dependencies
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // Define the user schema
 const rosterSchema = new mongoose.Schema({
   year: {
     type: String,
-    required: true
+    required: true,
   },
   owner_id: {
     type: String,
-    required: true
+    required: true,
   },
   team_id: {
     type: String,
-    required: true
+    required: true,
+  },
+  league_id: {
+    type: String,
+    required: true,
   },
   team_name: {
-    type: String, 
-    required: true
+    type: String,
+    required: true,
+  },
+  external_roster_id: {
+    type: String,
+    required: true,
+  },
+  season: {
+    type: String,
+    required: true,
   }
 });
 
 // Create the user model using the schema
-const Roster = mongoose.model('Roster', rosterSchema);
+const Roster = mongoose.model("Roster", rosterSchema);
 
 // Export the User model
 module.exports = Roster;

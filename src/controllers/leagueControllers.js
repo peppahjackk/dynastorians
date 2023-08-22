@@ -49,25 +49,23 @@ exports.getExternalLeagues = async (req, res) => {
 };
 
 exports.syncLeague = async (req, res) => {
-  const { id: externalLeagueId, externalSystem } = req.body;
+  const { id: externalLeagueId, externalSystem, sport } = req.body;
   try {
-    const exists = await leagueService.checkLeagueExists(externalLeagueId);
-    if (exists) {
-      res.json({
-        message: `League with external ID ${externalLeagueId} is already connected.`,
-      });
-    } else {
+    const league = await leagueService.getLeague(externalLeagueId);
+    if (!league) {
       // If the league does not exist in our database, we need to connect it
-      const newLeague = await leagueService.createLeague({
+      league = await leagueService.createLeague({
         externalLeagueId,
         externalSystem,
         sport,
       });
-      res.status(201).json(newLeague);
     }
+
+    // TODO validate league is up to date if it already exists
+
+    const updatedLeagueData = await team.syncTeams(league);
     
-    // const updatedLeagueData = await leagueService.updateRosters(newLeague.id);
-    // res.status(201).json(updatedLeagueData);
+    res.status(201).json(updatedLeagueData);
   } catch (error) {
     res.status(500).send({
       error: `An error occurred while connecting the user to the external system: ${error.message}`,
