@@ -1,16 +1,17 @@
 const { getExternalRosters } = require("../utils/generic");
 const { updateRoster } = require("./rosterService");
 const Team = require("../models/team");
+const League = require("../models/league");
 
 exports.syncTeams = async ({ id, externalLeagueId, externalSystem }) => {
   try {
-    const currentExternalRosters = getExternalRosters({
+    const { rosters: currentExternalRosters } = await getExternalRosters({
       externalSystem,
       externalLeagueId,
     });
 
     for (const externalRoster of currentExternalRosters) {
-      let teamResource = await Team.find()
+      let teamResource = await Team.findOne()
         .where("league_id")
         .equals(id)
         .where("external_team_id")
@@ -25,13 +26,17 @@ exports.syncTeams = async ({ id, externalLeagueId, externalSystem }) => {
         teamResource = await newTeam.save();
       }
 
-      await updateRoster({ team_id: teamResource._id, league_id: id, externalRoster });
+      await updateRoster({
+        team_id: teamResource._id,
+        league_id: id,
+        externalRoster,
+      });
     }
 
-    const league = await Roster.find().where("leagueId").equals(id);
+    const league = await League.findById(id);
 
     return league;
   } catch (error) {
-    throw new Error("Error syncing rosters: ", error.message);
+    throw new Error(`Error syncing teams: ${error.message}`);
   }
 };

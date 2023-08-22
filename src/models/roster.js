@@ -3,14 +3,6 @@ const mongoose = require("mongoose");
 
 // Define the user schema
 const rosterSchema = new mongoose.Schema({
-  year: {
-    type: String,
-    required: true,
-  },
-  owner_id: {
-    type: String,
-    required: true,
-  },
   team_id: {
     type: String,
     required: true,

@@ -1,4 +1,5 @@
 const leagueService = require("../services/leagueService");
+const teamService = require("../services/teamService");
 
 // get all leagues
 exports.getAllLeagues = async (req, res) => {
@@ -49,21 +50,22 @@ exports.getExternalLeagues = async (req, res) => {
 };
 
 exports.syncLeague = async (req, res) => {
-  const { id: externalLeagueId, externalSystem, sport } = req.body;
+  const { id: externalLeagueId, externalSystem, sport, name } = req.body;
   try {
-    const league = await leagueService.getLeague(externalLeagueId);
+    let league = await leagueService.getLeague(externalLeagueId);
     if (!league) {
       // If the league does not exist in our database, we need to connect it
       league = await leagueService.createLeague({
         externalLeagueId,
         externalSystem,
         sport,
+        name
       });
     }
 
     // TODO validate league is up to date if it already exists
 
-    const updatedLeagueData = await team.syncTeams(league);
+    const updatedLeagueData = await teamService.syncTeams(league);
     
     res.status(201).json(updatedLeagueData);
   } catch (error) {

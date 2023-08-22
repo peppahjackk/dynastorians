@@ -8,7 +8,7 @@ exports.getUserFromFF = async (credentials) => {
     const user = response.data;
     return user;
   } catch (error) {
-    throw new Error("Error getting user from external system" + error.message);
+    throw new Error("Error getting user from FleaFlicker" + error.message);
   }
 };
 
@@ -18,9 +18,10 @@ exports.getRostersFromFF = async (id) => {
       `https://www.fleaflicker.com/api/FetchLeagueRosters?sport=NFL&league_id=${id}`
     );
     const league = response.data;
+
     return league;
   } catch (error) {
-    throw new Error("Error getting user from external system" + error.message);
+    throw new Error("Error getting Rosters from FleaFlicker" + error.message);
   }
 };
 
