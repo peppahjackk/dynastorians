@@ -5,7 +5,7 @@ const teamService = require("../services/teamService");
 exports.getAllLeagues = async (req, res) => {
   try {
     const allLeagues = await leagueService.getAllLeagues();
-    res.json(allLeagues);
+    res.status(200).json(allLeagues);
   } catch (error) {
     res.status(500).send({ message: `Bummer, Error: ${error.message}` });
   }
@@ -16,7 +16,22 @@ exports.getLeagueById = async (req, res) => {
   try {
     const league = await leagueService.getLeagueById(id);
     if (league) {
-      res.json(league);
+      res.status(200).json(league);
+    } else {
+      res.status(404).send({ message: "League not found" });
+    }
+  } catch (error) {
+    res.status(500).send({ message: `Error: ${error.message}` });
+  }
+};
+
+exports.deleteLeague = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const league = await leagueService.deleteLeague({ id });
+    console.log("league", league);
+    if (league) {
+      res.status(200).send({ message: "League deleted successfully" });
     } else {
       res.status(404).send({ message: "League not found" });
     }
@@ -41,7 +56,7 @@ exports.getExternalLeagues = async (req, res) => {
     const { leagues } = await leagueService.getExternalLeaguesForUser(
       externalUserData
     );
-    res.send(leagues);
+    res.status(200).send(leagues);
   } catch (error) {
     res.status(500).send({
       error: `An error occurred while connecting the getting the external League: ${error.message}`,
@@ -53,21 +68,22 @@ exports.syncLeague = async (req, res) => {
   const { id: externalLeagueId, externalSystem, sport, name } = req.body;
   try {
     let league = await leagueService.getLeague(externalLeagueId);
+    let statusCode = 200;
     if (!league) {
       // If the league does not exist in our database, we need to connect it
       league = await leagueService.createLeague({
         externalLeagueId,
         externalSystem,
         sport,
-        name
+        name,
       });
+      statusCode = 201;
     }
-
     // TODO validate league is up to date if it already exists
 
     const updatedLeagueData = await teamService.syncTeams(league);
-    
-    res.status(201).json(updatedLeagueData);
+
+    res.status(statusCode).json(updatedLeagueData);
   } catch (error) {
     res.status(500).send({
       error: `An error occurred while connecting the user to the external system: ${error.message}`,

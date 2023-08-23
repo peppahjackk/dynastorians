@@ -6,7 +6,7 @@ exports.createUser = async (req, res) => {
   const userData = req.body;
   try {
     const user = await userService.createUser(userData);
-    res.send(user);
+    res.status(201).send(user);
   } catch (error) {
     res
       .status(500)
@@ -20,7 +20,7 @@ exports.createUser = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await userService.getAllUsers();
-    res.json(users);
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ error: "An error occurred while retrieving users" });
   }
@@ -31,7 +31,7 @@ exports.getUserById = async (req, res) => {
   const userId = req.params.id;
   try {
     const user = await userService.getUserById(userId);
-    res.json(user);
+    res.status(200).json(user);
   } catch (error) {
     res
       .status(500)

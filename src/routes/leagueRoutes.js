@@ -6,6 +6,7 @@ router.get("/leagues", leagueController.getLeagueById);
 router.get("/", leagueController.getAllLeagues);
 router.get("/external", leagueController.getExternalLeagues);
 router.post("/sync", leagueController.syncLeague);
+router.delete("/:id", leagueController.deleteLeague);
 
 // define more routes related to leagues...
 
