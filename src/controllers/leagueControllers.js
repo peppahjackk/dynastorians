@@ -1,7 +1,6 @@
 const leagueService = require("../services/leagueService");
 const teamService = require("../services/teamService");
 
-// get all leagues
 exports.getAllLeagues = async (req, res) => {
   try {
     const allLeagues = await leagueService.getAllLeagues();

@@ -8,6 +8,4 @@ router.get("/user/external", leagueController.getExternalLeagues);
 router.post("/sync", leagueController.syncLeague);
 router.delete("/:id", leagueController.deleteLeague);
 
-// define more routes related to leagues...
-
 module.exports = router;

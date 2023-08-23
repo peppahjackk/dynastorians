@@ -7,6 +7,4 @@ router.get("/:id", userController.getUserById);
 router.post("/", userController.createUser);
 router.delete("/:id", userController.deleteUser);
 
-// define more routes related to leagues...
-
 module.exports = router;

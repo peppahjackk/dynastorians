@@ -1,7 +1,6 @@
 const express = require("express");
 const userService = require("../services/userService");
 
-// Create a new user
 exports.createUser = async (req, res) => {
   const userData = req.body;
   try {
@@ -16,7 +15,6 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// Get all users
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await userService.getAllUsers();
@@ -26,7 +24,6 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// Get user by ID
 exports.getUserById = async (req, res) => {
   const userId = req.params.id;
   try {
