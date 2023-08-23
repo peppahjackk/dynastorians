@@ -1,4 +1,3 @@
-const axios = require("axios"); // you may need to install this with npm install axios
 const User = require("../models/user"); // Import the User model
 
 // Function to create a new user
@@ -12,24 +11,10 @@ exports.createUser = async (userData) => {
   }
 };
 
-
-// Function to connect a user to a league
-exports.connectUserToLeague = async (userId, leagueId) => {
-  try {
-    const user = await User.findById(userId);
-    user.connectedLeagues.push(leagueId);
-    const updatedUser = await user.save();
-    return updatedUser;
-  } catch (error) {
-    throw new Error("Error connecting user to league" + error.message);
-  }
-};
-
 // Function to fetch user by ID
 exports.getUserById = async (userId) => {
   try {
     const user = await User.findById(userId);
-    console.log('user', userId, user)
     return user;
   } catch (error) {
     throw new Error("Error retrieving user with leagues" + error.message);
@@ -43,5 +28,15 @@ exports.getAllUsers = async () => {
     return users;
   } catch (error) {
     throw new Error("Error retrieving users" + error.message);
+  }
+};
+
+// Function to delete a user
+exports.deleteUser = async ({ id }) => {
+  try {
+    const user = await User.findByIdAndDelete(id);
+    return user;
+  } catch (error) {
+    throw new Error("Error deleting user" + error.message);
   }
 };

@@ -24,31 +24,3 @@ exports.getRostersFromFF = async (id) => {
     throw new Error("Error getting Rosters from FleaFlicker" + error.message);
   }
 };
-
-exports.formatFFLeagueData = (leagueData) => {
-  const { id, name, sport } = leagueData;
-
-  return {
-    id,
-    name,
-    sport,
-  };
-};
-
-exports.formatFFRosterData = (rosterData) => {
-  const {
-    id: externalPlayerId,
-    nameFirst,
-    nameLast,
-    positionElibility,
-    proTeamAbbreviation,
-  } = rosterData;
-
-  return {
-    externalPlayerId,
-    nameFirst,
-    nameLast,
-    positionElibility,
-    proTeamAbbreviation,
-  };
-};

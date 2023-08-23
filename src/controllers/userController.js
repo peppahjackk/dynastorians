@@ -38,3 +38,18 @@ exports.getUserById = async (req, res) => {
       .json({ error: "An error occurred while retrieving user with leagues" });
   }
 };
+
+// Delete user by ID
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await userService.deleteUser({ id });
+    if (user) {
+      res.status(200).send({ message: "User deleted successfully" });
+    } else {
+      res.status(404).send({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).send({ message: `Error: ${error.message}` });
+  }
+}

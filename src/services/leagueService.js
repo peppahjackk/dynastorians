@@ -11,7 +11,7 @@ exports.createLeague = async (leagueData) => {
   }
 };
 
-exports.getLeague = async (externalLeagueId) => {
+exports.getLeagueByExternalId = async (externalLeagueId) => {
   try {
     const league = await League.findOne({ externalLeagueId });
     return league;
@@ -22,7 +22,7 @@ exports.getLeague = async (externalLeagueId) => {
 
 exports.getLeagueById = async (id) => {
   try {
-    const league = await League.findOne({ id });
+    const league = await League.findById(id);
     return league;
   } catch (error) {
     throw new Error("Error getting league " + error.message);

@@ -5,6 +5,7 @@ const userController = require("../controllers/userController");
 router.get("/", userController.getAllUsers);
 router.get("/:id", userController.getUserById);
 router.post("/", userController.createUser);
+router.delete("/:id", userController.deleteUser);
 
 // define more routes related to leagues...
 

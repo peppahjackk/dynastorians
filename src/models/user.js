@@ -11,10 +11,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  connectedTeams: {
-    type: [String],
-    required: false
-  },
 });
 
 // Create the user model using the schema

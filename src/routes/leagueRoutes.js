@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const leagueController = require("../controllers/leagueControllers");
 
-router.get("/leagues", leagueController.getLeagueById);
 router.get("/", leagueController.getAllLeagues);
-router.get("/external", leagueController.getExternalLeagues);
+router.get("/:id", leagueController.getLeagueById);
+router.get("/user/external", leagueController.getExternalLeagues);
 router.post("/sync", leagueController.syncLeague);
 router.delete("/:id", leagueController.deleteLeague);
 

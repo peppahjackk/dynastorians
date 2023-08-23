@@ -29,7 +29,6 @@ exports.deleteLeague = async (req, res) => {
   const { id } = req.params;
   try {
     const league = await leagueService.deleteLeague({ id });
-    console.log("league", league);
     if (league) {
       res.status(200).send({ message: "League deleted successfully" });
     } else {
@@ -67,7 +66,7 @@ exports.getExternalLeagues = async (req, res) => {
 exports.syncLeague = async (req, res) => {
   const { id: externalLeagueId, externalSystem, sport, name } = req.body;
   try {
-    let league = await leagueService.getLeague(externalLeagueId);
+    let league = await leagueService.getLeagueByExternalId(externalLeagueId);
     let statusCode = 200;
     if (!league) {
       // If the league does not exist in our database, we need to connect it
