@@ -40,3 +40,16 @@ exports.syncTeams = async ({ id, externalLeagueId, externalSystem }) => {
     throw new Error(`Error syncing teams: ${error.message}`);
   }
 };
+
+exports.getTeamByLeagueId = async ({ id }) => {
+  try {
+    let teams = await Team.find()
+      .where("league_id")
+      .equals(id)
+
+    return teams;
+
+  } catch (error) {
+    throw new Error(`Error fetching teams: ${error.message}`)
+  }
+}
