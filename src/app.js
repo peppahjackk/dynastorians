@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const leagueRoutes = require('./routes/leagueRoutes');
 const userRoutes = require('./routes/userRoutes');
-const teamRoutes = require('./routes/teamRoutes')
+const teamRoutes = require('./routes/teamRoutes');
+const rosterRoutes = require('./routes/rosterRoutes');
 
 // Create an instance of Express
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/leagues', leagueRoutes);
 app.use('/users', userRoutes);
 app.use('/teams', teamRoutes);
+app.use('/rosters', rosterRoutes);
 
 // Set up server to listen on a port
 const port = 3000;

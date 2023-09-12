@@ -35,3 +35,16 @@ exports.updateRoster = async ({ team_id, league_id, externalRoster }) => {
     throw new Error("Error updating roster: " + error.message);
   }
 };
+
+exports.getRosterByLeagueId = async ({ id }) => {
+  try {
+    let rosters = await Roster.find()
+      .where("league_id")
+      .equals(id)
+
+    return rosters;
+
+  } catch (error) {
+    throw new Error(`Error fetching rosters: ${error.message}`)
+  }
+}
