@@ -6,6 +6,7 @@ const leagueRoutes = require('./routes/leagueRoutes');
 const userRoutes = require('./routes/userRoutes');
 const teamRoutes = require('./routes/teamRoutes');
 const rosterRoutes = require('./routes/rosterRoutes');
+const matchRoutes = require('./routes/matchRoutes');
 
 // Create an instance of Express
 const app = express();
@@ -17,6 +18,7 @@ app.use('/leagues', leagueRoutes);
 app.use('/users', userRoutes);
 app.use('/teams', teamRoutes);
 app.use('/rosters', rosterRoutes);
+app.use('/matches', matchRoutes);
 
 // Set up server to listen on a port
 const port = 3000;
