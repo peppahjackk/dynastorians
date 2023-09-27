@@ -22,6 +22,25 @@ const rosterSchema = new mongoose.Schema({
   season: {
     type: String,
     required: true,
+  },
+  wins: {
+    type: Number,
+    required: true,
+  },
+  losses: {
+    type: Number,
+    required: true,
+  },
+  pointsFor: {
+    type: Number,
+    required: true,
+  },
+  pointsAgainst: {
+    type: Number,
+    required: true,
+  },
+  placement: {
+    type: Number
   }
 });
 
