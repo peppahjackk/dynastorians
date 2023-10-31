@@ -1,9 +1,11 @@
 const League = require("../models/league");
 const { getUserFromFF } = require("../utils/fleaflicker");
+const { determineFirstSeason } = require("../utils/generic");
 
 exports.createLeague = async (leagueData) => {
   try {
-    const league = new League(leagueData);
+    const firstSeason = await determineFirstSeason({ externalSystem: leagueData.externalSystem, externalLeagueId: leagueData.externalLeagueId });
+    const league = new League({ ...leagueData, firstSeason });
     const savedLeague = await league.save();
     return savedLeague;
   } catch (error) {

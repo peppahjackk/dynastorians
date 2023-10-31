@@ -76,6 +76,7 @@ exports.syncLeague = async (req, res) => {
         name,
       });
       statusCode = 201;
+      console.log('League created! Id: ', league._id)
     }
     // TODO validate league is up to date if it already exists
 

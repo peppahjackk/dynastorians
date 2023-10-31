@@ -6,6 +6,7 @@ const League = require("../models/league");
 // A Team carries extends over several seasons, while a Roster is only for one year
 exports.syncTeams = async ({ id, externalLeagueId, externalSystem }) => {
   try {
+    console.log('Syncing teams...')
     const { rosters: currentExternalRosters } = await getExternalRosters({
       externalSystem,
       externalLeagueId,

@@ -34,6 +34,10 @@ const leagueSchema = new mongoose.Schema({
     required: true,
     enum: ['sleeper', 'fleaflicker'],
   },
+  firstSeason: {
+    type: String,
+    required: true,
+  }
 });
 
 // Create the league model using the schema
