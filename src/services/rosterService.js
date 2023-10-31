@@ -9,25 +9,29 @@ exports.updateRoster = async ({ team_id, league_id, externalRoster }) => {
       );
     }
 
-    const roster = await Roster.findOne().where("team_id").equals(team_id);
+    
+    let roster = await Roster.findOne().where("team_id").equals(team_id);
 
     let updatedRoster;
+    const rosterPayload = {
+      team_id: team_id,
+      external_roster_id: externalRoster.team.id,
+      season: getCurrentSeason(),
+      team_name: externalRoster.team.name,
+      league_id,
+      pointsFor: externalRoster.team.pointsFor.value,
+      pointsAgainst: externalRoster.team.pointsAgainst.value,
+      placement: externalRoster.team.recordOverall.rank,
+      wins: externalRoster.team.recordOverall.wins ?? 0,
+      losses: externalRoster.team.recordOverall.losses ?? 0,
+    }
+    
     if (!roster || roster.length === 0) {
-      const newRoster = new Roster({
-        team_id: team_id,
-        external_roster_id: externalRoster.team.id,
-        season: getCurrentSeason(),
-        team_name: externalRoster.team.name,
-        league_id,
-      });
+
+      const newRoster = new Roster(rosterPayload);
       updatedRoster = await newRoster.save();
     } else {
-      roster.team_id = team_id;
-      roster.external_roster_id = externalRoster.team.id;
-      roster.season = getCurrentSeason();
-      roster.team_name = externalRoster.team.name;
-      roster.league_id = league_id;
-      updatedRoster = await roster.save();
+      updatedRoster = await roster.set({ ...rosterPayload});
     }
 
     return updatedRoster;
