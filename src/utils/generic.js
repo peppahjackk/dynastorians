@@ -16,11 +16,11 @@ const getCurrentSeason = () => {
   return season.toString();
 };
 
-const getExternalRosters = async ({ externalSystem, externalLeagueId }) => {
+const getExternalRosters = async ({ externalSystem, externalLeagueId, season }) => {
   try {
     let externalLeague;
     if (externalSystem === "fleaflicker") {
-      externalLeague = await getRostersFromFF(externalLeagueId);
+      externalLeague = await getRostersFromFF({ id: externalLeagueId, season });
     }
 
     return externalLeague;

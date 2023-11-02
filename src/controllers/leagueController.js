@@ -1,5 +1,6 @@
 const leagueService = require("../services/leagueService");
 const teamService = require("../services/teamService");
+const rosterService = require("../services/rosterService")
 
 exports.getAllLeagues = async (req, res) => {
   try {
@@ -80,9 +81,10 @@ exports.syncLeague = async (req, res) => {
     }
     // TODO validate league is up to date if it already exists
 
-    const updatedLeagueData = await teamService.syncTeams(league);
+    await teamService.syncTeams(league);
+    await rosterService.syncRosters(league);
 
-    res.status(statusCode).json(updatedLeagueData);
+    res.status(statusCode).json(league);
   } catch (error) {
     res.status(500).send({
       error: `An error occurred while connecting the user to the external system: ${error.message}`,

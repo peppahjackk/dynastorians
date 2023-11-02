@@ -12,10 +12,16 @@ exports.getUserFromFF = async (credentials) => {
   }
 };
 
-exports.getRostersFromFF = async (id) => {
+exports.getRostersFromFF = async ({ id, season }) => {
   try {
+    const params = new URLSearchParams();
+    params.set('league_id', id);
+    if (season) {
+      params.set('season', season)
+    }
+
     const response = await axios.get(
-      `https://www.fleaflicker.com/api/FetchLeagueRosters?sport=NFL&league_id=${id}`
+      `https://www.fleaflicker.com/api/FetchLeagueRosters?sport=NFL&${params.toString()}`
     );
     const league = response.data;
 
@@ -25,11 +31,11 @@ exports.getRostersFromFF = async (id) => {
   }
 };
 
-exports.getFirstSeason = async ({ externalLeagueId: id, currentSeason}) => {
+exports.getFirstSeason = async ({ externalLeagueId: id, currentSeason }) => {
   try {
     let oldestDraft = Number(currentSeason);
     let moreDraftsToGo = true;
-    while(moreDraftsToGo) {
+    while (moreDraftsToGo) {
       const seasonToTry = oldestDraft - 1;
       const response = await axios.get('https://www.fleaflicker.com/api/FetchLeagueDraftBoard?sport=NFL&league_id=' + id + '&season=' + seasonToTry);
       if (response?.data?.rows == null && response?.data?.orderedSelections == null) {
