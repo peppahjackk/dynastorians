@@ -11,10 +11,6 @@ const leagueSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  // teamIds: {
-  //   type: [String],
-  //   required: true
-  // },
   externalLeagueId: {
     type: String,
     required: true,

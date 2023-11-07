@@ -1,7 +1,7 @@
-import React from "react";
 import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
   // call my api from a useQuery
@@ -20,14 +20,16 @@ export const Home = () => {
 
   return (
     <div>
-      <Typography variant="h2">Home</Typography>
+      <Typography variant="h2">Your Leagues</Typography>
       {data == null || data.length === 0 ? (
         <Typography variant="h3">No leagues found</Typography>
       ) : (
         data.map((league: any) => (
-          <Typography key={league.id} variant="body1">
-            {league.name}
-          </Typography>
+          <Link to={`league/${league._id}`} key={league._id}>
+            <Typography variant="h5">
+              {league.name}
+            </Typography>
+          </Link>
         ))
       )}
     </div>
