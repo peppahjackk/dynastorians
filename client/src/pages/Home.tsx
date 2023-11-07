@@ -1,21 +1,16 @@
 import { Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import { useLeagues } from "../queries/useLeagues";
 
 export const Home = () => {
-  // call my api from a useQuery
-  const { isLoading, error, data } = useQuery({
-    queryKey: ["leagues"],
-    queryFn: () => axios.get("/api/leagues").then((res) => res.data),
-  });
+  const { isLoading, error, data } = useLeagues();
 
   if (isLoading) {
     return <div>loading...</div>;
   }
 
   if (error) {
-    return <div>error...</div>;
+    return <div>error</div>;
   }
 
   return (
