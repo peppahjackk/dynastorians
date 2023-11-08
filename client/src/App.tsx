@@ -1,15 +1,20 @@
 import "./App.css";
-import { Typography } from "@mui/material";
-import { Home } from "./pages/Home";
+import { RouterProvider } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { router } from "./router.tsx";
+
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 function App() {
   return (
-    <>
-      <div className="App">
-        <Typography variant="h1">Dynastorians</Typography>
-        <Home />
-      </div>
-    </>
+    <ThemeProvider theme={darkTheme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   );
 }
 

@@ -1,9 +1,12 @@
 import { useParams } from 'react-router'
+import { Layout } from '../components/Layout';
 
 export const League = () => {
-    const { leagueId } = useParams();
+  const { leagueId } = useParams();
 
-    return (
-        <div>League - {leagueId} </div>
-    )
+  return (
+    <Layout title={`League Name`}>
+      Let's have some fun, {leagueId}
+    </Layout>
+  )
 }

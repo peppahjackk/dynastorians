@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useLeagues } from "../queries/useLeagues";
+import { Layout } from "../components/Layout";
 
 export const Home = () => {
   const { isLoading, error, data } = useLeagues();
@@ -14,8 +15,7 @@ export const Home = () => {
   }
 
   return (
-    <div>
-      <Typography variant="h2">Your Leagues</Typography>
+    <Layout title="Your Leagues">
       {data == null || data.length === 0 ? (
         <Typography variant="h3">No leagues found</Typography>
       ) : (
@@ -27,6 +27,6 @@ export const Home = () => {
           </Link>
         ))
       )}
-    </div>
+    </Layout>
   );
 };
