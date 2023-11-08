@@ -1,11 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import { League } from "./pages/League";
-import { Home } from "./pages/Home";
+import { League, Leagues } from "./pages/Leagues";
 
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: <Home />,
+        element: <Leagues />,
     },
     {
         path: '/league/:leagueId',

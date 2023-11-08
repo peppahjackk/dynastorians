@@ -1,9 +1,9 @@
 import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useLeagues } from "../queries/useLeagues";
-import { Layout } from "../components/Layout";
+import { useLeagues } from "./queries/useLeagues";
+import { Layout } from "../../components/Layout";
 
-export const Home = () => {
+export const Leagues = () => {
   const { isLoading, error, data } = useLeagues();
 
   if (isLoading) {
