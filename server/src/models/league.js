@@ -7,30 +7,30 @@ const leagueSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  dateCreated: {
+  date_created: {
     type: Date,
     default: Date.now
   },
-  externalLeagueId: {
+  external_league_id: {
     type: String,
     required: true,
   },
-  dateUpdated: {
+  date_updated: {
     type: Date,
     required: true,
     default: Date.now
   },
   status: {
     type: String,
-    enum: ['Idle', 'Syncing', 'Error'],
-    default: "Idle"
+    enum: ['idle', 'syncing', 'error'],
+    default: "idle"
   },
-  externalSystem: {
+  external_system: {
     type: String,
     required: true,
     enum: ['sleeper', 'fleaflicker'],
   },
-  firstSeason: {
+  first_season: {
     type: String,
     required: true,
   }

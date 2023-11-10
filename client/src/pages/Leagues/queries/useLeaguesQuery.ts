@@ -1,9 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import axios from 'axios'
-
-interface League {
-    name: string
-}
+import { League } from '../types/league'
 
 function fetchLeagues(): Promise<League[]> {
     return axios.get('/api/leagues').then((response) => response.data)
