@@ -1,4 +1,4 @@
-const { getRostersFromFF, getFirstSeason } = require("./fleaflicker");
+const { getRostersFromFF, getfirst_season } = require("./fleaflicker");
 
 const SEASON_END_MONTH = 2;
 const SEASON_END_DAY = 11;
@@ -16,11 +16,11 @@ const getCurrentSeason = () => {
   return season.toString();
 };
 
-const getExternalRosters = async ({ externalSystem, externalLeagueId, season }) => {
+const getExternalRosters = async ({ external_system, external_league_id, season }) => {
   try {
     let externalLeague;
-    if (externalSystem === "fleaflicker") {
-      externalLeague = await getRostersFromFF({ id: externalLeagueId, season });
+    if (external_system === "fleaflicker") {
+      externalLeague = await getRostersFromFF({ id: external_league_id, season });
     }
 
     return externalLeague;
@@ -29,12 +29,12 @@ const getExternalRosters = async ({ externalSystem, externalLeagueId, season }) 
   }
 };
 
-const determineFirstSeason = async ({ externalSystem, externalLeagueId }) => {
+const determinefirst_season = async ({ external_system, external_league_id }) => {
   try {
     console.log('Getting first season...')
     let externalLeague;
-    if (externalSystem === "fleaflicker") {
-      externalLeague = await getFirstSeason({ externalLeagueId, currentSeason: getCurrentSeason() });
+    if (external_system === "fleaflicker") {
+      externalLeague = await getfirst_season({ external_league_id, currentSeason: getCurrentSeason() });
     }
 
     return externalLeague;
@@ -46,5 +46,5 @@ const determineFirstSeason = async ({ externalSystem, externalLeagueId }) => {
 module.exports = {
   getCurrentSeason,
   getExternalRosters,
-  determineFirstSeason
+  determinefirst_season
 }

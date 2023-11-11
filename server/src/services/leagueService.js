@@ -1,11 +1,11 @@
 const League = require("../models/league");
 const { getUserFromFF } = require("../utils/fleaflicker");
-const { determineFirstSeason } = require("../utils/generic");
+const { determinefirst_season } = require("../utils/generic");
 
 exports.createLeague = async (leagueData) => {
   try {
-    const firstSeason = await determineFirstSeason({ externalSystem: leagueData.externalSystem, externalLeagueId: leagueData.externalLeagueId });
-    const league = new League({ ...leagueData, firstSeason });
+    const first_season = await determinefirst_season({ external_system: leagueData.external_system, external_league_id: leagueData.external_league_id });
+    const league = new League({ ...leagueData, first_season });
     const savedLeague = await league.save();
     return savedLeague;
   } catch (error) {
@@ -13,9 +13,9 @@ exports.createLeague = async (leagueData) => {
   }
 };
 
-exports.getLeagueByExternalId = async (externalLeagueId) => {
+exports.getLeagueByExternalId = async (external_league_id) => {
   try {
-    const league = await League.findOne({ externalLeagueId });
+    const league = await League.findOne({ external_league_id });
     return league;
   } catch (error) {
     throw new Error("Error getting league by external id " + error.message);
@@ -51,10 +51,10 @@ exports.getAllLeagues = async () => {
 
 exports.getExternalLeaguesForUser = async (externalUserData) => {
   try {
-    const { externalSystem, credentials } = externalUserData;
+    const { external_system, credentials } = externalUserData;
 
     let externalUser;
-    if (externalSystem === "fleaflicker") {
+    if (external_system === "fleaflicker") {
       externalUser = await getUserFromFF(credentials);
     }
 

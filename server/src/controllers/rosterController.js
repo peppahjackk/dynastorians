@@ -2,15 +2,12 @@ const express = require("express");
 const rosterService = require("../services/rosterService");
 
 exports.getRosters = async (req, res) => {
-  const { leagueId } = req.body;
+  const { league_id, team_id, season } = req.body;
   try {
-
-    let rosters;
-    if (leagueId != null) {
-        rosters = await rosterService.getRosterByLeagueId({ id: leagueId});
-    } else {
-        throw new Error('Insufficient arguments provided')
+    if (league_id == null && team_id == null && season == null) {
+      throw new Error('Insufficient arguments provided')
     }
+    const rosters = await rosterService.getRosters({ league_id, team_id, season });
 
     res.status(200).send(rosters);
   } catch (error) {

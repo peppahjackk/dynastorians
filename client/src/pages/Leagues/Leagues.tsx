@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useLeaguesQuery } from "./queries/useLeagues";
+import { useLeaguesQuery } from "./queries/useLeaguesQuery";
 import { Layout } from "../../components/Layout";
 
 export const Leagues = () => {

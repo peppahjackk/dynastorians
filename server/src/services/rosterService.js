@@ -41,25 +41,25 @@ const updateRoster = async ({ league_id, externalRoster, season }) => {
   }
 };
 
-exports.syncRosters = async ({ _id: id, externalLeagueId, externalSystem, firstSeason }) => {
+exports.syncRosters = async ({ _id: id, external_league_id, external_system, first_season }) => {
   try {
     console.log('Syncing rosters...')
-    if (!externalLeagueId || !externalSystem || !firstSeason || !id) {
-      throw new Error(`Missing required params for syncRosters: id: ${id}, firstSeason: ${firstSeason}, externalSystem: ${externalSystem}, external_league_id: ${external_league_id}`
+    if (!external_league_id || !external_system || !first_season || !id) {
+      throw new Error(`Missing required params for syncRosters: id: ${id}, first_season: ${first_season}, external_system: ${external_system}, external_league_id: ${external_league_id}`
       )
     }
     const currentSeason = getCurrentSeason();
     let seasonInCycle = currentSeason;
     let seasonInCycleNeedsSync = true;
 
-    while (seasonInCycle >= firstSeason && seasonInCycleNeedsSync) {
+    while (seasonInCycle >= first_season && seasonInCycleNeedsSync) {
       const rostersInternal = Roster.find({ seasonInCycle, league_id: id })
       if (rostersInternal.length > 0 && seasonInCycle != currentSeason) {
         seasonInCycleNeedsSync = false;
         return
       }
 
-      const externalLeague = await getExternalRosters({ externalSystem, externalLeagueId, season: seasonInCycle })
+      const externalLeague = await getExternalRosters({ external_system, external_league_id, season: seasonInCycle })
       for (const externalRoster of externalLeague.rosters) {
         await updateRoster({ externalRoster, season: seasonInCycle, league_id: id })
       }
@@ -73,11 +73,20 @@ exports.syncRosters = async ({ _id: id, externalLeagueId, externalSystem, firstS
   }
 }
 
-exports.getRosterByLeagueId = async ({ id }) => {
+exports.getRosters = async ({ league_id, team_id, season }) => {
   try {
-    let rosters = await Roster.find()
-      .where("league_id")
-      .equals(id)
+    const searchParams = {}
+    if (league_id != null) {
+      searchParams.league_id = league_id
+    }
+    if (team_id != null) {
+      searchParams.team_id = team_id
+    }
+    if (season != null) {
+      searchParams.season = season
+    }
+
+    let rosters = await Roster.find(searchParams).exec();
 
     return rosters;
 

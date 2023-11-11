@@ -1,8 +1,8 @@
 export interface League {
   name: string;
   id: string;
-  externalSystem: "sleeper" | "fleaflicker";
-  externalLeagueId: string;
-  firstSeason: string;
+  external_system: "sleeper" | "fleaflicker";
+  external_league_id: string;
+  first_season: string;
   status: "Idle" | "Syncing" | "Error";
 }

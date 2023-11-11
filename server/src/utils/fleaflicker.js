@@ -31,7 +31,7 @@ exports.getRostersFromFF = async ({ id, season }) => {
   }
 };
 
-exports.getFirstSeason = async ({ externalLeagueId: id, currentSeason }) => {
+exports.getfirst_season = async ({ external_league_id: id, currentSeason }) => {
   try {
     let oldestDraft = Number(currentSeason);
     let moreDraftsToGo = true;

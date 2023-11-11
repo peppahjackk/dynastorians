@@ -5,9 +5,9 @@ import { useLeagueQuery } from "./queries/useLeagueQuery";
 export const League = () => {
   const { leagueId } = useParams();
 
-  const { data, loading, error } = useLeagueQuery({ id: leagueId });
+  const { data, isLoading, error } = useLeagueQuery({ id: leagueId });
 
-  if (loading) {
+  if (isLoading) {
     return <div>loading...</div>;
   }
 
