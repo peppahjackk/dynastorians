@@ -94,3 +94,19 @@ exports.getRosters = async ({ league_id, team_id, season }) => {
     throw new Error(`Error fetching rosters: ${error.message}`)
   }
 }
+
+exports.generateStats = (rosters => {
+  const stats = {
+    wins: 0,
+    losses: 0,
+  }
+
+  rosters.forEach(({wins, losses}) => {
+    stats.wins += wins
+    stats.losses += losses
+  })
+
+  stats.winPct = stats.wins / (stats.wins + stats.losses);
+
+  return stats
+})

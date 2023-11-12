@@ -1,6 +1,7 @@
 import { useParams } from "react-router";
 import { Layout } from "../../components/Layout";
 import { useLeagueQuery } from "./queries/useLeagueQuery";
+import { Standings } from "../Team/components/Standings/Standings";
 
 export const League = () => {
   const { leagueId } = useParams();
@@ -21,7 +22,7 @@ export const League = () => {
 
   return (
     <Layout title={data.name}>
-      
+      <Standings league_id={leagueId} />
     </Layout>
   );
 };

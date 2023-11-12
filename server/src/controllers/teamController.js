@@ -20,8 +20,6 @@ exports.getTeams = async (req, res) => {
 
     const teams = await teamService.getTeams(teamQueryParams);
 
-    console.log('teams', teams)
-
     const fullTeamsResponse = await Promise.all(teams.map(async (team) => {
       const rosterQueryParams = { team_id: team._id };
       if (season != null) {
@@ -29,12 +27,14 @@ exports.getTeams = async (req, res) => {
       }
       const rosters = await rosterService.getRosters(rosterQueryParams)
 
-      return { _id: team._id, league_id: team.league_id, external_team_id: team.external_league_id, rosters }
+      const stats = await rosterService.generateStats(rosters)
+
+      return { _id: team._id, league_id: team.league_id, external_team_id: team.external_league_id, rosters, stats }
     }))
 
-    console.log('fullTeamsResponse', fullTeamsResponse)
+    const sortedTeams = fullTeamsResponse.sort((a, b) => b.stats.winPct - a.stats.winPct)
 
-    res.status(200).send(fullTeamsResponse);
+    res.status(200).send(sortedTeams);
   } catch (error) {
     res
       .status(500)
