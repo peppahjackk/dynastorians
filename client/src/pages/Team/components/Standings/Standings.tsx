@@ -1,36 +1,42 @@
 import React from 'react'
 import { useTeamsQuery } from '../../queries/useTeamsQuery'
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+
+const columns: GridColDef[] = [
+  { field: 'id', headerName: "Team", width: 200, valueGetter: ({ row }) => (row.rosters[row.rosters.length - 1].team_name) },
+  {
+    field: 'stats.winPct', headerName: "Win %", width: 150, valueGetter: ({ row }) =>
+      (row.stats.winPct * 100).toFixed(2) + '%'
+  },
+  { field: 'record', headerName: 'Record', width: 150, valueGetter: ({ row }) => `${row.stats.wins}-${row.stats.losses}` }
+]
 
 export const Standings = ({ league_id }: { league_id: string, season?: string }) => {
   const { data: teamsData, isLoading: teamsIsLoading, error: teamsError } = useTeamsQuery({ league_id });
 
+  let content;
   if (teamsIsLoading) {
-    return <div>loading teams...</div>
+    content = <div>loading teams...</div>
   }
 
   if (teamsError) {
-    return <div>Teams error: {teamsError.message}</div>
+    content = <div>Teams error: {teamsError.message}</div>
   }
 
   if (teamsData == null || teamsData.length <= 0) {
-    return <div>No teams data found!</div>
+    content = <div>No teams data found!</div>
+  }
+
+  if (teamsData != null) {
+    const rows = teamsData.map(team => ({ ...team, id: team._id }))
+    content = <DataGrid columns={columns} rows={rows} />
   }
 
   return (
     <Box>
-      <div>Standings</div>
-      {teamsData.map(team => {
-        const mostRecentRoser = team.rosters[team.rosters.length - 1];
-        return <div key={team._id}>
-          <Stack direction="row" spacing={2}>
-            <Typography variant="body1">{mostRecentRoser.team_name}</Typography>
-            <Typography variant="body1">{team.stats.winPct.toFixed(3)}</Typography>
-            <Typography variant="body1">{team.stats.wins}-{team.stats.losses}</Typography>
-          </Stack>
-        </div>
-      })}
+      <Typography variant="h3">Standings</Typography>
+      {content}
     </Box>
-
   )
 }
