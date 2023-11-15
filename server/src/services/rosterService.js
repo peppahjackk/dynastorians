@@ -101,12 +101,15 @@ exports.generateStats = (rosters => {
     losses: 0,
   }
 
-  rosters.forEach(({wins, losses}) => {
+  let totalPoints = 0;
+  rosters.forEach(({wins, losses, pointsFor}) => {
     stats.wins += wins
     stats.losses += losses
+    totalPoints += pointsFor
   })
 
   stats.winPct = stats.wins / (stats.wins + stats.losses);
+  stats.averagePoints = totalPoints / (stats.wins + stats.losses)
 
   return stats
 })

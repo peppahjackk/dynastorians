@@ -32,7 +32,7 @@ exports.getTeams = async (req, res) => {
       return { _id: team._id, league_id: team.league_id, external_team_id: team.external_league_id, rosters, stats }
     }))
 
-    const sortedTeams = fullTeamsResponse.sort((a, b) => b.stats.winPct - a.stats.winPct)
+    const sortedTeams = fullTeamsResponse.sort((a, b) => b.stats.averagePoints - a.stats.averagePoints)
 
     res.status(200).send(sortedTeams);
   } catch (error) {

@@ -6,10 +6,11 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 const columns: GridColDef[] = [
   { field: 'id', headerName: "Team", width: 200, valueGetter: ({ row }) => (row.rosters[row.rosters.length - 1].team_name) },
   {
-    field: 'stats.winPct', headerName: "Win %", width: 150, valueGetter: ({ row }) =>
+    field: 'winPct', headerName: "Win %", width: 150, valueGetter: ({ row }) =>
       (row.stats.winPct * 100).toFixed(2) + '%'
   },
-  { field: 'record', headerName: 'Record', width: 150, valueGetter: ({ row }) => `${row.stats.wins}-${row.stats.losses}` }
+  { field: 'record', headerName: 'Record', width: 150, valueGetter: ({ row }) => `${row.stats.wins}-${row.stats.losses}` },
+  { field: 'averagePoints', headerName: 'Average Points', width: 150, valueGetter: ({ row }) => row.stats.averagePoints.toFixed(2) }
 ]
 
 export const Standings = ({ league_id }: { league_id: string, season?: string }) => {
