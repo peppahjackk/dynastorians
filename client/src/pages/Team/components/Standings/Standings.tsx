@@ -4,6 +4,9 @@ import { Box, Typography } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 const columns: GridColDef[] = [
+  {
+    field: 'num', headerName: "#", width: 200, valueGetter: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1
+  },
   { field: 'id', headerName: "Team", width: 200, valueGetter: ({ row }) => (row.rosters[row.rosters.length - 1].team_name) },
   {
     field: 'winPct', headerName: "Win %", width: 150, valueGetter: ({ row }) =>
