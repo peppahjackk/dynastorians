@@ -14,7 +14,7 @@ exports.getRosters = async (req, res) => {
     res
       .status(500)
       .send({
-        error: "An error occurred while creating the user" + error.message,
+        error: "An error occurred while getting rosters" + error.message,
       });
   }
 };

@@ -40,8 +40,9 @@ exports.getfirst_season = async ({ external_league_id: id, currentSeason }) => {
       const response = await axios.get('https://www.fleaflicker.com/api/FetchLeagueDraftBoard?sport=NFL&league_id=' + id + '&season=' + seasonToTry);
       if (response?.data?.rows == null && response?.data?.orderedSelections == null) {
         moreDraftsToGo = false;
+      } else {
+        oldestDraft = seasonToTry;
       }
-      oldestDraft = seasonToTry;
     }
 
     return oldestDraft.toString();

@@ -96,16 +96,32 @@ exports.getRosters = async ({ league_id, team_id, season }) => {
 }
 
 exports.generateStats = (rosters => {
+  const currentSeason = getCurrentSeason();
+
   const stats = {
     wins: 0,
     losses: 0,
+    bestRecord: {
+      wins: null,
+      losses: null,
+      season: null
+    }
   }
 
   let totalPoints = 0;
-  rosters.forEach(({wins, losses, pointsFor}) => {
+  rosters.forEach(({ wins, losses, pointsFor, season }) => {
     stats.wins += wins
     stats.losses += losses
     totalPoints += pointsFor
+
+    const winPct = wins / (wins + losses);
+
+    if (season != currentSeason && (stats.bestRecord.wins === null || winPct > stats.bestRecord.winPct)) {
+      stats.bestRecord.wins = wins;
+      stats.bestRecord.losses = losses;
+      stats.bestRecord.season = season;
+      stats.bestRecord.winPct = winPct;
+    }
   })
 
   stats.winPct = stats.wins / (stats.wins + stats.losses);
