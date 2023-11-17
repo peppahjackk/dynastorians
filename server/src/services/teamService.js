@@ -49,3 +49,20 @@ exports.getTeams = async ({ league_id }) => {
     throw new Error(`Error fetching teams: ${error.message}`)
   }
 }
+
+exports.delete = async ({ league_id, id }) => {
+  try {
+    let team;
+    if (league_id != null) {
+      team = await Team.findAndDelete({ league_id });
+    }
+
+    if (id != null) {
+      team = await Team.findOneAndDelete(id)
+    }
+    
+    return team;
+  } catch (error) {
+    throw new Error("Error deleting league" + error.message);
+  }
+}

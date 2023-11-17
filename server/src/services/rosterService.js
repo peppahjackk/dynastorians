@@ -2,6 +2,45 @@ const Roster = require("../models/roster");
 const Team = require("../models/team");
 const { getCurrentSeason, getExternalRosters } = require("../utils/generic");
 
+exports.getRosters = async ({ league_id, team_id, season }) => {
+  try {
+    const searchParams = {}
+    if (league_id != null) {
+      searchParams.league_id = league_id
+    }
+    if (team_id != null) {
+      searchParams.team_id = team_id
+    }
+    if (season != null) {
+      searchParams.season = season
+    }
+
+    let rosters = await Roster.find(searchParams).exec();
+
+    return rosters;
+
+  } catch (error) {
+    throw new Error(`Error fetching rosters: ${error.message}`)
+  }
+}
+
+exports.delete = async ({ league_id, id }) => {
+  try {
+    let roster;
+    if (league_id != null) {
+      roster = await Roster.findAndDelete({ league_id });
+    }
+
+    if (id != null) {
+      roster = await Roster.findOneAndDelete(id)
+    }
+
+    return roster;
+  } catch (error) {
+    throw new Error("Error deleting league" + error.message);
+  }
+}
+
 const updateRoster = async ({ league_id, externalRoster, season }) => {
   try {
     if (!league_id || !externalRoster || !season) {
@@ -70,28 +109,6 @@ exports.syncRosters = async ({ _id: id, external_league_id, external_system, fir
     return;
   } catch (error) {
     throw new Error("Error syncing rosters: " + error.message);
-  }
-}
-
-exports.getRosters = async ({ league_id, team_id, season }) => {
-  try {
-    const searchParams = {}
-    if (league_id != null) {
-      searchParams.league_id = league_id
-    }
-    if (team_id != null) {
-      searchParams.team_id = team_id
-    }
-    if (season != null) {
-      searchParams.season = season
-    }
-
-    let rosters = await Roster.find(searchParams).exec();
-
-    return rosters;
-
-  } catch (error) {
-    throw new Error(`Error fetching rosters: ${error.message}`)
   }
 }
 

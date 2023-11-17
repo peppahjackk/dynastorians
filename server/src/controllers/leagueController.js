@@ -29,13 +29,15 @@ exports.deleteLeague = async (req, res) => {
   const { id } = req.params;
   try {
     const league = await leagueService.deleteLeague({ id });
-    if (league) {
-      res.status(200).send({ message: "League deleted successfully" });
-    } else {
+    if (!league) {
       res.status(404).send({ message: "League not found" });
     }
+    
+    await teamService.delete({ league_id: id })
+    await rosterService.delete({ league_id: id })
+    res.status(200).send({ message: "League deleted successfully" });
   } catch (error) {
-    res.status(500).send({ message: `Error: ${error.message}` });
+    res.status(500).send({ message: `Error deleting league: ${error.message}` });
   }
 };
 
