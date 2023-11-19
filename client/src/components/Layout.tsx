@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import { AppBar, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material'
+import { AppBar, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close'
+import { useNavigate } from 'react-router-dom'
 
 const drawerWidth = 240;
 
 export const Layout = ({ title, children }: { title: string, children: React.ReactNode }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -30,7 +32,7 @@ export const Layout = ({ title, children }: { title: string, children: React.Rea
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate('/')}>
             <ListItemText primary="Leagues" />
           </ListItemButton>
         </ListItem>
@@ -104,8 +106,11 @@ export const Layout = ({ title, children }: { title: string, children: React.Rea
         <Box sx={{ display: { sm: 'none', xs: 'block' } }}>
           <Toolbar />
         </Box>
-        <Typography variant="h2">{title}</Typography>
-        {children}</Box>
-    </Box>
+        <Stack direction="column" spacing={2}>
+          <Typography variant="h3">{title}</Typography>
+          {children}
+        </Stack>
+      </Box>
+    </Box >
   )
 }

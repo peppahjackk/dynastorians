@@ -2,6 +2,7 @@ import { useParams } from "react-router";
 import { Layout } from "../../components/Layout";
 import { useLeagueQuery } from "./queries/useLeagueQuery";
 import { Standings } from "../Team/components/Standings/Standings";
+import { Stack } from "@mui/material";
 
 export const League = () => {
   const { leagueId } = useParams();
@@ -12,8 +13,8 @@ export const League = () => {
     return <div>loading...</div>;
   }
 
-  if (error) {
-    return <div>error</div>;
+  if (error || !leagueId) {
+    return <div>{error ? error.message : !leagueId ? 'No league id' : 'Something went wrong'}</div>;
   }
 
   if (data == null) {
@@ -22,7 +23,9 @@ export const League = () => {
 
   return (
     <Layout title={data.name}>
-      <Standings league_id={leagueId} />
+      <Stack direction="column" spacing={2}>
+        <Standings league_id={leagueId} />
+      </Stack>
     </Layout>
   );
 };
