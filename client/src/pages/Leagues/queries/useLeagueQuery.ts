@@ -13,5 +13,6 @@ export function useLeagueQuery({ id }: { id?: string }) {
   return useQuery({
     queryKey: ["leagues", id],
     enabled: id == null ? false : true,
-    queryFn: () => fetchLeague({ id })  });
+    queryFn: () => fetchLeague({ id }),
+  });
 }

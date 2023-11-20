@@ -21,9 +21,7 @@ export const Leagues = () => {
       ) : (
         data.map((league: any) => (
           <Link to={`league/${league._id}`} key={league._id}>
-            <Typography variant="h5">
-              {league.name}
-            </Typography>
+            <Typography variant="h5">{league.name}</Typography>
           </Link>
         ))
       )}

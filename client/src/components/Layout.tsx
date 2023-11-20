@@ -1,13 +1,32 @@
-import React, { useState } from 'react'
-import { AppBar, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from '@mui/material'
-import { Box } from '@mui/system'
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import {
+  AppBar,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { Box } from "@mui/system";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
-export const Layout = ({ title, children }: { title: string, children: React.ReactNode }) => {
+export const Layout = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -23,7 +42,7 @@ export const Layout = ({ title, children }: { title: string, children: React.Rea
           aria-label="close drawer"
           edge="start"
           onClick={handleDrawerToggle}
-          sx={{ mr: 2, display: { sm: 'none' } }}
+          sx={{ mr: 2, display: { sm: "none" } }}
         >
           <CloseIcon />
         </IconButton>
@@ -32,7 +51,7 @@ export const Layout = ({ title, children }: { title: string, children: React.Rea
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ListItemButton onClick={() => navigate('/')}>
+          <ListItemButton onClick={() => navigate("/")}>
             <ListItemText primary="Leagues" />
           </ListItemButton>
         </ListItem>
@@ -40,15 +59,14 @@ export const Layout = ({ title, children }: { title: string, children: React.Rea
     </Box>
   );
 
-
   return (
-    <Box sx={{ display: 'flex', width: '100%', minHeight: '100vh' }}>
+    <Box sx={{ display: "flex", width: "100%", minHeight: "100vh" }}>
       <AppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          display: { xs: 'block', sm: 'none' }
+          display: { xs: "block", sm: "none" },
         }}
       >
         <Toolbar>
@@ -57,7 +75,7 @@ export const Layout = ({ title, children }: { title: string, children: React.Rea
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />
           </IconButton>
@@ -81,8 +99,11 @@ export const Layout = ({ title, children }: { title: string, children: React.Rea
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
         >
           {drawer}
@@ -90,9 +111,12 @@ export const Layout = ({ title, children }: { title: string, children: React.Rea
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: 'block' },
+            display: { xs: "none", sm: "block" },
 
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
           open
         >
@@ -101,9 +125,16 @@ export const Layout = ({ title, children }: { title: string, children: React.Rea
       </Box>
       <Box
         component="main"
-        sx={{ flexGrow: 1, pt: 3, pr: 4, pb: 3, pl: 4, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+        sx={{
+          flexGrow: 1,
+          pt: 3,
+          pr: 4,
+          pb: 3,
+          pl: 4,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+        }}
       >
-        <Box sx={{ display: { sm: 'none', xs: 'block' } }}>
+        <Box sx={{ display: { sm: "none", xs: "block" } }}>
           <Toolbar />
         </Box>
         <Stack direction="column" spacing={2}>
@@ -111,6 +142,6 @@ export const Layout = ({ title, children }: { title: string, children: React.Rea
           {children}
         </Stack>
       </Box>
-    </Box >
-  )
-}
+    </Box>
+  );
+};

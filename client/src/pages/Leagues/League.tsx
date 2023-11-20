@@ -14,7 +14,15 @@ export const League = () => {
   }
 
   if (error || !leagueId) {
-    return <div>{error ? error.message : !leagueId ? 'No league id' : 'Something went wrong'}</div>;
+    return (
+      <div>
+        {error
+          ? error.message
+          : !leagueId
+          ? "No league id"
+          : "Something went wrong"}
+      </div>
+    );
   }
 
   if (data == null) {

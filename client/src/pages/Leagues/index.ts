@@ -1,2 +1,2 @@
-export { League } from './League'
-export { Leagues } from './Leagues'
+export { League } from "./League";
+export { Leagues } from "./Leagues";
