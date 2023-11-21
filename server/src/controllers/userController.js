@@ -1,5 +1,6 @@
 const express = require("express");
 const userService = require("../services/userService");
+const { getAuth } = require("firebase/auth");
 
 exports.createUser = async (req, res) => {
   const userData = req.body;
@@ -7,11 +8,9 @@ exports.createUser = async (req, res) => {
     const user = await userService.createUser(userData);
     res.status(201).send(user);
   } catch (error) {
-    res
-      .status(500)
-      .send({
-        error: "An error occurred while creating the user" + error.message,
-      });
+    res.status(500).send({
+      error: "An error occurred while creating the user" + error.message,
+    });
   }
 };
 
@@ -49,4 +48,16 @@ exports.deleteUser = async (req, res) => {
   } catch (error) {
     res.status(500).send({ message: `Error: ${error.message}` });
   }
-}
+};
+
+exports.getCurrentUser = async (req, res) => {
+  try {
+    const auth = await getAuth();
+
+    res.status(200).send(auth.currentUser);
+  } catch (error) {
+    res.status(500).send({ message: `Error getting auth: ${error.message}` });
+  }
+};
+
+exports.signIn = async (req, res) => {};
