@@ -1,6 +1,6 @@
 const express = require("express");
 const userService = require("../services/userService");
-const { getAuth, createUserWithEmailAndPassword } = require("firebase/auth");
+// const { getAuth, createUserWithEmailAndPassword } = require("firebase/auth");
 
 exports.createUser = async (req, res) => {
   const userData = req.body;
@@ -60,28 +60,28 @@ exports.getCurrentUser = async (req, res) => {
   }
 };
 
-exports.signIn = async (req, res) => {};
+// exports.signIn = async (req, res) => {};
 
-exports.signUp = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// exports.signUp = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
 
-    if (email == null || password == null) {
-      throw new Error(
-        `Insufficient signup parameters provided: email missing ${
-          email == null
-        }, password missing ${password == null}`,
-        );
-    }
+//     if (email == null || password == null) {
+//       throw new Error(
+//         `Insufficient signup parameters provided: email missing ${
+//           email == null
+//         }, password missing ${password == null}`,
+//         );
+//     }
     
-    const auth = await getAuth();
-    createUserWithEmailAndPassword(auth, email, password).then(userCredential => {
-      const user = userCredential.user;
+//     const auth = await getAuth();
+//     createUserWithEmailAndPassword(auth, email, password).then(userCredential => {
+//       const user = userCredential.user;
 
-      res.status(200).send(currentUser);
+//       res.status(200).send(currentUser);
 
-    });
-  } catch (error) {
-    res.status(500).send({ message: `Error signing up: ${error.message}` });
-  }
-};
+//     });
+//   } catch (error) {
+//     res.status(500).send({ message: `Error signing up: ${error.message}` });
+//   }
+// };

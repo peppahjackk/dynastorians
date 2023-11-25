@@ -1,7 +1,7 @@
 // Import dependencies
 const express = require('express');
 const mongoose = require('mongoose');
-const { initializeApp } = require("firebase/app");
+// const { initializeApp } = require("firebase/app");
 require('dotenv').config();
 const leagueRoutes = require('./routes/leagueRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -42,20 +42,20 @@ mongoose.connect(dbConnectionString, {
   console.error('Error connecting to MongoDB:', error);
 });
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: "dynastorians.firebaseapp.com",
-  projectId: "dynastorians",
-  storageBucket: "dynastorians.appspot.com",
-  messagingSenderId: "614940800097",
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID
-};
+// // Your web app's Firebase configuration
+// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// const firebaseConfig = {
+//   apiKey: process.env.FIREBASE_API_KEY,
+//   authDomain: "dynastorians.firebaseapp.com",
+//   projectId: "dynastorians",
+//   storageBucket: "dynastorians.appspot.com",
+//   messagingSenderId: "614940800097",
+//   appId: process.env.FIREBASE_APP_ID,
+//   measurementId: process.env.FIREBASE_MEASUREMENT_ID
+// };
 
 
-console.log("Initializing firebase...")
-// Initialize Firebase
-initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
+// console.log("Initializing firebase...")
+// // Initialize Firebase
+// initializeApp(firebaseConfig);
+// // const analytics = getAnalytics(app);
