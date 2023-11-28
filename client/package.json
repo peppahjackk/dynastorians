@@ -17,13 +17,17 @@
     "@mui/material": "^5.14.16",
     "@mui/x-data-grid": "^6.18.1",
     "@tanstack/react-query": "^5.4.3",
+    "@types/dotenv": "^8.2.0",
     "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "firebase": "^10.7.0",
     "firebaseui": "^6.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0"
   },
   "devDependencies": {
+    "@types/node": "^20.10.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
