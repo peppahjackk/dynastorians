@@ -1,23 +1,33 @@
-import React from "react";
+import { useState } from "react";
 import { Button } from "@mui/material";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "../../features/auth/useAuth";
 
 export const SignedOut = () => {
-  const auth = getAuth();
+  const auth = useAuth();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSignup = () => {
-    console.log('auth', auth)
-    createUserWithEmailAndPassword(auth, "theodore.moke@gmail.com", "1234")
+    setIsProcessing(true);
+    
+    createUserWithEmailAndPassword(
+      auth,
+      "theodore.moke@gmail.com",
+      "dflkjasdf723rj&",
+    )
       .then((userCredentials) => {
         console.log("userCredentials", userCredentials);
       })
       .catch((error) => {
         console.error(error.message);
+      })
+      .finally(() => {
+        setIsProcessing(false);
       });
   };
   return (
     <div>
-      <Button onClick={handleSignup}>Sign Up</Button>
+      <Button disabled={isProcessing} onClick={handleSignup}>Sign Up</Button>
     </div>
   );
 };
