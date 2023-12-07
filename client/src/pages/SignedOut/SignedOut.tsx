@@ -1,34 +1,17 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useAuth } from "../../features/auth/useAuth";
 import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { AuthForm } from "./components/AuthForm";
+
+const VIEWS = {
+  SIGNUP: "SIGNUP",
+  LOGIN: "LOGIN",
+  DEFAULT: "DEFAULT",
+};
 
 export const SignedOut = () => {
-  const auth = useAuth();
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const handleSignup = () => {
-    setIsProcessing(true);
-
-    createUserWithEmailAndPassword(
-      auth,
-      "theodore.moke@gmail.com",
-      "dflkjasdf723rj&",
-    )
-      .then((userCredentials) => {
-        console.log("userCredentials", userCredentials);
-      })
-      .catch((error) => {
-        console.error(error.message);
-      })
-      .finally(() => {
-        setIsProcessing(false);
-      });
-  };
-
-  const handleLogin = () => {};
+  const [view, setView] = useState(VIEWS.DEFAULT);
 
   return (
     <Grid
@@ -47,24 +30,30 @@ export const SignedOut = () => {
           </Typography>
         </Box>
       </Grid>
-      <Grid item xs={12} md={3}>
-        <Box display="flex" justifyContent="center">
-          <Button disabled={isProcessing} onClick={handleLogin}>
-            Login
-          </Button>
-        </Box>
-      </Grid>
-      <Grid item xs={12} md={3}>
-        <Box display="flex" justifyContent="center">
-          <Button
-            variant="contained"
-            disabled={isProcessing}
-            onClick={handleSignup}
-          >
-            Sign Up
-          </Button>
-        </Box>
-      </Grid>
+      {view === VIEWS.SIGNUP ? (
+        <Grid item xs={12} md={6}>
+          <AuthForm type="SIGNUP" onCancel={() => setView(VIEWS.DEFAULT)} />
+        </Grid>
+      ) : view === VIEWS.LOGIN ? (
+        <Grid type="LOGIN" item xs={12} md={6}>
+          <AuthForm onCancel={() => setView(VIEWS.DEFAULT)} />
+        </Grid>
+      ) : (
+        <>
+          <Grid item xs={12} md={3}>
+            <Box display="flex" justifyContent="center">
+              <Button onClick={() => setView(VIEWS.LOGIN)}>Login</Button>
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <Box display="flex" justifyContent="center">
+              <Button variant="contained" onClick={() => setView(VIEWS.SIGNUP)}>
+                Sign Up
+              </Button>
+            </Box>
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 };
