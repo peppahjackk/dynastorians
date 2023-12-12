@@ -35,8 +35,8 @@ export const SignedOut = () => {
           <AuthForm type="SIGNUP" onCancel={() => setView(VIEWS.DEFAULT)} />
         </Grid>
       ) : view === VIEWS.LOGIN ? (
-        <Grid type="LOGIN" item xs={12} md={6}>
-          <AuthForm onCancel={() => setView(VIEWS.DEFAULT)} />
+        <Grid item xs={12} md={6}>
+          <AuthForm type="LOGIN" onCancel={() => setView(VIEWS.DEFAULT)} />
         </Grid>
       ) : (
         <>
