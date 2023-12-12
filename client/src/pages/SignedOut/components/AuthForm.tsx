@@ -38,17 +38,14 @@ export const AuthForm = ({
     setError(null);
     setProcessing(true);
     try {
-      let actionPromise;
-
       if (type === "SIGNUP") {
-        actionPromise = handleSignup();
+        await handleSignup();
       } else if (type === "LOGIN") {
-        actionPromise = handleLogin();
+        await handleLogin();
       } else {
         throw new Error(`Invalid auth type: ${type}`);
       }
 
-      await actionPromise;
       onSubmit && onSubmit();
     } catch (error: unknown) {
       if (error instanceof Error) {
