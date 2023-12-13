@@ -34,7 +34,8 @@ export const AuthForm = ({
   const theme = useTheme();
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setError(null);
     setProcessing(true);
     try {
@@ -73,7 +74,7 @@ export const AuthForm = ({
   };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <Box
         display="grid"
         gridTemplateColumns="max-content"
@@ -117,7 +118,7 @@ export const AuthForm = ({
             Cancel
           </Button>
           <Button
-            onClick={handleSubmit}
+            type="submit"
             variant="contained"
             disabled={email === "" || password === "" || processing}
           >

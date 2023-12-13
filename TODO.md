@@ -7,7 +7,8 @@
   - [x] routing to home with logged in user
   - [x] routing to login with no current user
   - [ ] verify
-  - [ ] signout
+  - [x] signout
+  - [x] enter
 - [ ] error boundary
 - [ ] icon
 - [ ] league sync flow
