@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { AuthForm } from "./components/AuthForm";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../features/auth/useAuth";
 
 const VIEWS = {
   SIGNUP: "SIGNUP",
@@ -12,6 +14,15 @@ const VIEWS = {
 
 export const SignedOut = () => {
   const [view, setView] = useState(VIEWS.DEFAULT);
+  const navigate = useNavigate();
+
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   return (
     <Grid

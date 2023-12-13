@@ -30,7 +30,7 @@ export const AuthForm = ({
   const [password, setPassword] = useState("");
   const [error, setError] = useState<null | string>(null);
   const [processing, setProcessing] = useState(false);
-  const auth = useAuth();
+  const { auth } = useAuth();
   const theme = useTheme();
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
 

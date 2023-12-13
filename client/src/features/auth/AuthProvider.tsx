@@ -1,6 +1,6 @@
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -18,10 +18,30 @@ const firebaseApp = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(firebaseApp);
 
-export const AuthContext = createContext(auth);
-// export const AuthContext = createContext('dsfadsf');
+export const AuthContext = createContext<{
+  user: User | null;
+  auth: typeof auth;
+}>({ user: null, auth });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // return <AuthContext.Provider value={'ffff'}>{children}</AuthContext.Provider>;
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true); // Add loading state
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false); // Set loading to false when user data is ready
+    });
+    return unsubscribe; // Cleanup subscription on unmount
+  }, []);
+
+  if (loading) {
+    return null; // Or your custom loading component
+  }
+
+  return (
+    <AuthContext.Provider value={{ user, auth }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

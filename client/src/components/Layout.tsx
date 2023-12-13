@@ -7,7 +7,6 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
   Stack,
   Toolbar,
@@ -17,6 +16,7 @@ import { Box } from "@mui/system";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
+import { SidebarUserSection } from "../features/auth/SidebarUserSection";
 
 const drawerWidth = 240;
 
@@ -56,6 +56,8 @@ export const Layout = ({
           </ListItemButton>
         </ListItem>
       </List>
+      <Divider />
+      <SidebarUserSection />
     </Box>
   );
 

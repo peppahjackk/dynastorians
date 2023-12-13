@@ -1,10 +1,12 @@
 # Pre launch
 
 - [ ] auth
-  - [ ] connect authform inputs
-  - [ ] auth form error messages from firebase
-  - [ ] plug in login
-  - [ ] routing to login with no current user
+  - [x] connect authform inputs
+  - [x] auth form error messages from firebase
+  - [x] plug in login
+  - [x] routing to home with logged in user
+  - [x] routing to login with no current user
+  - [ ] verify
   - [ ] signout
 - [ ] error boundary
 - [ ] icon
