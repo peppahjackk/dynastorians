@@ -35,28 +35,35 @@ export const Layout = ({
   };
 
   const drawer = (
-    <Box>
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="close drawer"
-          edge="start"
-          onClick={handleDrawerToggle}
-          sx={{ mr: 2, display: { sm: "none" } }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <Typography variant="h6">Dynastorians</Typography>
-      </Toolbar>
-      <Divider />
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => navigate("/")}>
-            <ListItemText primary="Leagues" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-      <Divider />
+    <Box
+      display="flex"
+      height="100%"
+      flexDirection="column"
+      justifyContent="space-between"
+    >
+      <div>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="close drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: "none" } }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography variant="h6">Dynastorians</Typography>
+        </Toolbar>
+        <Divider />
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => navigate("/")}>
+              <ListItemText primary="Leagues" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Divider />
+      </div>
       <SidebarUserSection />
     </Box>
   );
