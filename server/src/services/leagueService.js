@@ -4,7 +4,10 @@ const { determinefirst_season } = require("../utils/generic");
 
 exports.createLeague = async (leagueData) => {
   try {
-    const first_season = await determinefirst_season({ external_system: leagueData.external_system, external_league_id: leagueData.external_league_id });
+    const first_season = await determinefirst_season({
+      external_system: leagueData.external_system,
+      external_league_id: leagueData.external_league_id,
+    });
     const league = new League({ ...leagueData, first_season });
     const savedLeague = await league.save();
     return savedLeague;
@@ -36,7 +39,7 @@ exports.deleteLeague = async ({ id }) => {
     const league = await League.findOneAndDelete(id);
     return league;
   } catch (error) {
-    throw new Error("Error deleting league" + error.message);
+    throw new Error("Error deleting league: " + error.message);
   }
 };
 
@@ -53,10 +56,16 @@ exports.getExternalLeaguesForUser = async (externalUserData) => {
   try {
     const { external_system, credentials } = externalUserData;
 
+    console.log('trying to get externalUserData', externalUserData)
+
     let externalUser;
     if (external_system === "fleaflicker") {
       externalUser = await getUserFromFF(credentials);
+    } else {
+      throw new Error("External system not supported");
     }
+
+    console.log('externalUser', externalUser)
 
     return externalUser;
   } catch (error) {

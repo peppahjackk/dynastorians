@@ -54,7 +54,7 @@ exports.delete = async ({ league_id, id }) => {
   try {
     let team;
     if (league_id != null) {
-      team = await Team.findAndDelete({ league_id });
+      team = await Team.deleteMany({ league_id });
     }
 
     if (id != null) {

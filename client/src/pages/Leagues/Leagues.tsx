@@ -1,10 +1,11 @@
-import { Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Button, Typography } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import { useLeaguesQuery } from "./queries/useLeaguesQuery";
 import { Layout } from "../../components/Layout";
 
 export const Leagues = () => {
   const { isLoading, error, data } = useLeaguesQuery();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <div>loading...</div>;
@@ -17,7 +18,7 @@ export const Leagues = () => {
   return (
     <Layout title="Your Leagues">
       {data == null || data.length === 0 ? (
-        <Typography variant="h3">No leagues found</Typography>
+        <Typography variant="h4">No leagues found</Typography>
       ) : (
         data.map((league: any) => (
           <Link to={`league/${league._id}`} key={league._id}>
@@ -25,6 +26,7 @@ export const Leagues = () => {
           </Link>
         ))
       )}
+      <Button variant="contained" onClick={()=>navigate("league/sync")}>+ Connect League</Button>
     </Layout>
   );
 };
