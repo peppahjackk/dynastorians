@@ -9,13 +9,19 @@ const columns: GridColDef[] = [
     headerName: "#",
     width: 35,
     valueGetter: (params) =>
-      params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
+    params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
   },
   {
     field: "id",
     headerName: "Team",
     width: 200,
     valueGetter: ({ row }) => row.rosters[0].team_name,
+  },
+  {
+    field: "averagePoints",
+    headerName: "Average Points",
+    width: 150,
+    valueGetter: ({ row }) => row?.stats?.averagePoints?.toFixed(2),
   },
   {
     field: "bestRecord",
@@ -35,12 +41,6 @@ const columns: GridColDef[] = [
     headerName: "Record",
     width: 100,
     valueGetter: ({ row }) => `${row.stats.wins}-${row.stats.losses}`,
-  },
-  {
-    field: "averagePoints",
-    headerName: "Average Points",
-    width: 100,
-    valueGetter: ({ row }) => row?.stats?.averagePoints?.toFixed(2),
   },
 ];
 
