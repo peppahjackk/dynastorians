@@ -17,7 +17,15 @@ function App() {
           }
         />
         <Route
-          path="/league/:leagueId"
+          path="/leagues"
+          element={
+            <ProtectedRoute>
+              <Leagues />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/leagues/:leagueId"
           element={
             <ProtectedRoute>
               <League />

@@ -1,58 +1,208 @@
 import React, { ChangeEvent, useState } from "react";
-import { Button, Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import axios from "axios";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Stack,
+} from "@mui/material";
 import { LeagueFF } from "../../../features/external/fleaflicker/fleaflickerTypes";
+import CheckIcon from "@mui/icons-material/Check";
+import { CircularProgress } from "@mui/material";
 
-export const SyncLeagueForm = ({ data }: { data: LeagueFF[] }) => {
-  const [leaguesToSync, setLeaguesToSync] = useState(data);
+interface LeagueSyncStatus {
+  [key: string]: {
+    status: "unselected" | "selected" | "syncing" | "success" | "error";
+    message: string;
+  };
+}
+
+const postLeagueSync = async (league: LeagueFF) => {
+  console.log("postLeagueSync", league);
+
+  const response = await axios.post("/api/leagues/sync", {
+    id: league.id,
+    name: league.name,
+    external_system: "fleaflicker",
+    sport: "NFL",
+  });
+
+  console.log("response", response);
+
+  return response.data;
+};
+
+const buildSyncStatus = (leagues: LeagueFF[]) => {
+  const status: LeagueSyncStatus = {};
+  leagues.forEach((league) => {
+    status[league.id] = {
+      status: "selected",
+      message: "",
+    };
+  });
+
+  return status;
+};
+
+export const SyncLeagueForm = ({
+  data,
+  onComplete,
+}: {
+  data: LeagueFF[];
+  onComplete?: () => void;
+}) => {
+  const [processing, setProcessing] = useState(false);
+  const [leagueSyncStatus, setLeagueSyncStatus] = useState<LeagueSyncStatus>(
+    buildSyncStatus(data),
+  );
 
   const handleCheckboxChange = (
     e: ChangeEvent<HTMLInputElement>,
     league: LeagueFF,
   ) => {
     const checked = e.target.checked;
-    const exists = leaguesToSync.some(
-      (leagueInState: LeagueFF) => leagueInState.id === league.id,
-    );
+    setLeagueSyncStatus((prev) => {
+      return {
+        ...prev,
+        [league.id]: {
+          status: checked ? "selected" : "unselected",
+          message: "",
+        },
+      };
+    });
+  };
 
-    if (checked && !exists) {
-      leaguesToSync.push(league);
-    } else if (!checked && exists) {
-      // Remove league from leaguesToSync
-      setLeaguesToSync((prev) => {
-        return prev.filter((leagueInState) => leagueInState.id !== league.id);
-      });
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setProcessing(true);
+    try {
+      const promises = Object.entries(leagueSyncStatus)
+        .filter(([, syncLeague]) => syncLeague.status === "selected")
+        .map(([id]) => {
+          const leagueToSync = data.find((l) => l.id.toString() === id);
+          if (!leagueToSync) {
+            throw new Error(`League ${id} not found`);
+          }
+
+          setLeagueSyncStatus((prev) => {
+            return {
+              ...prev,
+              [leagueToSync.id]: {
+                status: "syncing",
+                message: "",
+              },
+            };
+          });
+
+          return postLeagueSync(leagueToSync).then((payload) => {
+            return setLeagueSyncStatus((prev) => {
+              return {
+                ...prev,
+                [leagueToSync.id]: {
+                  status: "success",
+                  message: payload.message,
+                },
+              };
+            });
+          });
+        });
+      await Promise.all(promises);
+
+      onComplete && onComplete();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setProcessing(false);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-  };
+  const CheckboxSubstitue = ({ children }: { children: React.ReactNode }) => (
+    <div
+      style={{
+        height: "42px",
+        width: "42px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {children}
+    </div>
+  );
 
   return (
     <form onSubmit={handleSubmit}>
-      <FormGroup>
-        {data?.map((league: LeagueFF) => {
-          const isChecked = leaguesToSync.some((leagueFromData) => {
-            leagueFromData.id === league.id;
-          });
+      <Stack direction="column" spacing={2}>
+        <FormGroup>
+          {Object.entries(leagueSyncStatus).map(([id, leagueSync]) => {
+            const leagueStatus = leagueSync.status;
+            const league = data.find((l) => l.id === parseInt(id));
 
-          return (
-            <FormControlLabel
-              key={league.id}
-              control={
-                <Checkbox
-                  defaultChecked
-                  value={isChecked}
-                  onChange={(e) => handleCheckboxChange(e, league)}
+            if (!league) {
+              throw new Error(`League ${id} not found`);
+            }
+
+            if (leagueStatus === "syncing") {
+              return (
+                <FormControlLabel
+                  key={league.id}
+                  control={
+                    <CheckboxSubstitue>
+                      <CircularProgress size={24} />
+                    </CheckboxSubstitue>
+                  }
+                  label={league.name}
                 />
-              }
-              label={league.name}
-            />
-          );
-        })}
-      </FormGroup>
-      <Button type="submit">Sync</Button>
+              );
+            } else if (leagueStatus === "success") {
+              return (
+                <FormControlLabel
+                  key={league.id}
+                  control={
+                    <CheckboxSubstitue>
+                      <CheckIcon />
+                    </CheckboxSubstitue>
+                  }
+                  label={league.name}
+                />
+              );
+            } else if (leagueStatus === "error") {
+              return (
+                <FormControlLabel
+                  key={league.id}
+                  control={<div>error</div>}
+                  label={league.name}
+                />
+              );
+            } else if (
+              leagueStatus !== "unselected" &&
+              leagueStatus !== "selected"
+            ) {
+              throw new Error(
+                `Invalid league status: ${leagueStatus} on league ${league.id}`,
+              );
+            }
+
+            return (
+              <FormControlLabel
+                key={league.id}
+                control={
+                  <Checkbox
+                    disabled={processing}
+                    checked={leagueStatus === "selected"}
+                    onChange={(e) => handleCheckboxChange(e, league)}
+                  />
+                }
+                label={league.name}
+              />
+            );
+          })}
+        </FormGroup>
+        <Button type="submit" variant="contained" disabled={processing}>
+          {processing ? "Syncing..." : "Sync"}
+        </Button>
+      </Stack>
     </form>
   );
 };

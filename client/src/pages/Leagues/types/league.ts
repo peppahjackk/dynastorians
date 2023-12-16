@@ -1,6 +1,6 @@
 export interface League {
   name: string;
-  id: string;
+  _id: string;
   external_system: "sleeper" | "fleaflicker";
   external_league_id: string;
   first_season: string;
