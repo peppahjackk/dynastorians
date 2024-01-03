@@ -32,6 +32,8 @@ exports.signUp = async (req, res) => {
       email,
     });
 
+    if (!user) throw new Error("User not found");
+
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
@@ -81,13 +83,19 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-exports.getCurrentUser = async (req, res) => {
+exports.getMe = async (req, res) => {
   try {
-    const auth = await getAuth();
+    const token = req.cookies.token;
+    if (!token) throw new Error("Unauthorized");
 
-    res.status(200).send(auth.currentUser);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await userService.getUserById(decoded.userId);
+
+    if (!user) throw new Error("User not found");
+
+    res.status(200).send(user);
   } catch (error) {
-    res.status(500).send({ message: `Error getting auth: ${error.message}` });
+    res.status(401).send({ message: `Error: ${error.message}` });
   }
 };
 
@@ -110,10 +118,12 @@ exports.signIn = async (req, res) => {
       password,
     );
 
-    const user = userService.getUserByExternalId({
+    const user = await userService.getUserByExternalId({
       externalUserId: userCredential.user.uid,
       externalSystem: "firebase",
     });
+
+    if (!user) throw new Error("User not found");
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
@@ -123,5 +133,14 @@ exports.signIn = async (req, res) => {
     res.status(200).send(user);
   } catch (error) {
     res.status(500).send({ message: `Error signing in: ${error.message}` });
+  }
+};
+
+exports.signOut = async (req, res) => {
+  try {
+    res.clearCookie("token", { httpOnly: true });
+    res.status(200).send({ message: "Signed out successfully" });
+  } catch (error) {
+    res.status(500).send({ message: `Error signing out: ${error.message}` });
   }
 };

@@ -10,7 +10,7 @@ export const League = () => {
   const { data, isLoading, error } = useLeagueQuery({ id: leagueId });
 
   if (isLoading) {
-    return <div>loading...</div>;
+    return <div></div>;
   }
 
   if (error || !leagueId) {

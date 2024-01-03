@@ -1,11 +1,10 @@
 import React from "react";
 import { useAuth } from "./useAuth";
-import { signOut } from "firebase/auth";
 import { Box, Button, Skeleton, Stack, Typography } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export const SidebarUserSection = () => {
-  const { auth, user } = useAuth();
+  const { user, signOut } = useAuth();
 
   if (user == null) {
     return <Skeleton variant="rectangular" width={200} height={100} />;
@@ -24,7 +23,7 @@ export const SidebarUserSection = () => {
         <AccountCircleIcon />
         <Typography variant="body1">{user.email}</Typography>
       </Stack>
-      <Button onClick={() => signOut(auth)}>Sign Out</Button>
+      <Button onClick={() => signOut()}>Sign Out</Button>
     </Box>
   );
 };

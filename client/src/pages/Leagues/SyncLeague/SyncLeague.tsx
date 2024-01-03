@@ -14,7 +14,7 @@ export const SyncLeague = () => {
   const navigate = useNavigate();
 
   if (isLoading) {
-    return <div>loading...</div>;
+    return <div></div>;
   }
 
   if (error) {

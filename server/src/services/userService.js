@@ -26,6 +26,15 @@ exports.getUserByExternalId = async ({ externalSystem, externalUserId }) => {
   }
 };
 
+exports.getUserById = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    return user;
+  } catch (error) {
+    throw new Error("Error retrieving user with leagues" + error.message);
+  }
+};
+
 // Function to fetch all users
 exports.getAllUsers = async () => {
   try {
