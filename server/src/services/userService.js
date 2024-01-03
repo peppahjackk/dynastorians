@@ -12,9 +12,14 @@ exports.createUser = async (userData) => {
 };
 
 // Function to fetch user by ID
-exports.getUserById = async (userId) => {
+exports.getUserByExternalId = async ({ externalSystem, externalUserId }) => {
   try {
-    const user = await User.findById(userId);
+    const user = await User.findOne()
+      .where("external_user_id")
+      .equals(externalUserId)
+      .where("external_system")
+      .equals(externalSystem);
+
     return user;
   } catch (error) {
     throw new Error("Error retrieving user with leagues" + error.message);

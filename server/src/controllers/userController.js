@@ -1,11 +1,35 @@
 const express = require("express");
 const userService = require("../services/userService");
-// const { getAuth, createUserWithEmailAndPassword } = require("firebase/auth");
-
-exports.createUser = async (req, res) => {
-  const userData = req.body;
+const {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} = require("firebase/auth");
+const app = require("../initFirebase");
+exports.signUp = async (req, res) => {
   try {
-    const user = await userService.createUser(userData);
+    const { email, password } = req.body;
+
+    if (email == null || password == null) {
+      throw new Error(
+        `Insufficient signup parameters provided: email missing ${
+          email == null
+        }, password missing ${password == null}`,
+      );
+    }
+
+    const auth = await getAuth(app);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
+
+    const user = await userService.createUser({
+      external_user_id: userCredential.user.uid,
+      external_system: "firebase",
+    });
+
     res.status(201).send(user);
   } catch (error) {
     res.status(500).send({
@@ -60,28 +84,32 @@ exports.getCurrentUser = async (req, res) => {
   }
 };
 
-// exports.signIn = async (req, res) => {};
+exports.signIn = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-// exports.signUp = async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
+    if (email == null || password == null) {
+      throw new Error(
+        `Insufficient signup parameters provided: email missing ${
+          email == null
+        }, password missing ${password == null}`,
+      );
+    }
 
-//     if (email == null || password == null) {
-//       throw new Error(
-//         `Insufficient signup parameters provided: email missing ${
-//           email == null
-//         }, password missing ${password == null}`,
-//         );
-//     }
-    
-//     const auth = await getAuth();
-//     createUserWithEmailAndPassword(auth, email, password).then(userCredential => {
-//       const user = userCredential.user;
+    const auth = await getAuth();
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
 
-//       res.status(200).send(currentUser);
+    const user = userService.getUserByExternalId({
+      externalUserId: userCredential.user.uid,
+      externalSystem: "firebase",
+    });
 
-//     });
-//   } catch (error) {
-//     res.status(500).send({ message: `Error signing up: ${error.message}` });
-//   }
-// };
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send({ message: `Error signing in: ${error.message}` });
+  }
+};

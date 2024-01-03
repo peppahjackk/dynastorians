@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import {
   Alert,
   Button,
@@ -7,13 +8,36 @@ import {
   useTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  signInWithEmailAndPassword,
-  UserCredential,
-} from "firebase/auth";
-import { useAuth } from "../../../features/auth/useAuth";
+
+const signUp = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  const response = await axios.post("/api/users/signUp", {
+    email,
+    password,
+  });
+
+  return response.data;
+};
+
+const signIn = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  const response = await axios.post("/api/users/signIn", {
+    email,
+    password,
+  });
+
+  return response.data;
+};
 
 type AuthFormType = "SIGNUP" | "LOGIN";
 
@@ -30,7 +54,6 @@ export const AuthForm = ({
   const [password, setPassword] = useState("");
   const [error, setError] = useState<null | string>(null);
   const [processing, setProcessing] = useState(false);
-  const { auth } = useAuth();
   const theme = useTheme();
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -62,15 +85,11 @@ export const AuthForm = ({
   };
 
   const handleSignup = () => {
-    return createUserWithEmailAndPassword(auth, email, password).then(
-      (userCredentials: UserCredential) => {
-        sendEmailVerification(userCredentials.user);
-      },
-    );
+    return signUp({ email, password });
   };
 
   const handleLogin = () => {
-    return signInWithEmailAndPassword(auth, email, password);
+    return signIn({ email, password });
   };
 
   return (

@@ -1,20 +1,20 @@
 // Import the required dependencies
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // Define the user schema
 const userSchema = new mongoose.Schema({
-  username: {
+  external_user_id: {
     type: String,
-    required: true
+    required: true,
   },
-  email: {
+  external_system: {
     type: String,
-    required: true
+    required: true,
   },
 });
 
 // Create the user model using the schema
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 // Export the User model
 module.exports = User;

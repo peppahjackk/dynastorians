@@ -17,6 +17,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import { SidebarUserSection } from "../features/auth/SidebarUserSection";
+import { Logo } from "../assets/Logo";
 
 const drawerWidth = 240;
 
@@ -88,9 +89,12 @@ export const Layout = ({
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Dynastorians
-          </Typography>
+          <Stack>
+            <Logo />
+            <Typography variant="h6" noWrap component="div">
+              Dynastorians
+            </Typography>
+          </Stack>
         </Toolbar>
       </AppBar>
       <Box
@@ -151,6 +155,17 @@ export const Layout = ({
           {children}
         </Stack>
       </Box>
+      <footer>
+        Dinosaur by Orin zuu from{" "}
+        <a
+          href="https://thenounproject.com/browse/icons/term/dinosaur/"
+          target="_blank"
+          title="Dinosaur Icons"
+        >
+          Noun Project
+        </a>{" "}
+        (CC BY 3.0)
+      </footer>
     </Box>
   );
 };
