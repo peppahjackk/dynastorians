@@ -155,17 +155,6 @@ export const Layout = ({
           {children}
         </Stack>
       </Box>
-      <footer>
-        Dinosaur by Orin zuu from{" "}
-        <a
-          href="https://thenounproject.com/browse/icons/term/dinosaur/"
-          target="_blank"
-          title="Dinosaur Icons"
-        >
-          Noun Project
-        </a>{" "}
-        (CC BY 3.0)
-      </footer>
     </Box>
   );
 };

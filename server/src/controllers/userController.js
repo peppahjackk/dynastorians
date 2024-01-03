@@ -1,7 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const userService = require("../services/userService");
-const managerService = require("../services/managerService");
 const {
   getAuth,
   createUserWithEmailAndPassword,

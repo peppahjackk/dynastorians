@@ -11,9 +11,9 @@ exports.createManager = async (managerData) => {
   }
 };
 
-exports.getManagerById = async (managerId) => {
+exports.getManagerByUserId = async (user_id) => {
   try {
-    const manager = await Manager.findById(managerId);
+    const manager = await Manager.find().where("user_id").equals(user_id);
     return manager;
   } catch (error) {
     throw new Error("Error retrieving manager with leagues" + error.message);

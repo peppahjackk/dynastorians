@@ -13,7 +13,7 @@ const managerSchema = new mongoose.Schema({
   username: {
     type: String,
   },
-  externalSystem: {
+  external_system: {
     type: String,
     required: true,
   },

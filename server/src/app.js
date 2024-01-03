@@ -6,11 +6,12 @@ const leagueRoutes = require("./routes/leagueRoutes");
 const userRoutes = require("./routes/userRoutes");
 const teamRoutes = require("./routes/teamRoutes");
 const rosterRoutes = require("./routes/rosterRoutes");
+const managerRoutes = require("./routes/managerRoutes");
 const matchRoutes = require("./routes/matchRoutes");
 const cookieParser = require("cookie-parser");
 
-const firebase = require('./initFirebase')
-console.log('Firebase initialized: ', firebase._options.projectId)
+const firebase = require("./initFirebase");
+console.log("Firebase initialized: ", firebase._options.projectId);
 
 // Create an instance of Express
 const app = express();
@@ -24,6 +25,7 @@ app.use("/users", userRoutes);
 app.use("/teams", teamRoutes);
 app.use("/rosters", rosterRoutes);
 app.use("/matches", matchRoutes);
+app.use("/manager", managerRoutes);
 
 // Set up server to listen on a port
 const port = 3000;
