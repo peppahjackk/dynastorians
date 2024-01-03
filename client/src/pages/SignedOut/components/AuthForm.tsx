@@ -8,6 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";
+import { useAuth } from "../../../features/auth/useAuth";
 
 const signUp = async ({
   email,
@@ -56,6 +57,7 @@ export const AuthForm = ({
   const [processing, setProcessing] = useState(false);
   const theme = useTheme();
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
+  const { setUser } = useAuth();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -63,9 +65,11 @@ export const AuthForm = ({
     setProcessing(true);
     try {
       if (type === "SIGNUP") {
-        await handleSignup();
+        const user = await handleSignup();
+        setUser(user);
       } else if (type === "LOGIN") {
-        await handleLogin();
+        const user = await handleLogin();
+        setUser(user);
       } else {
         throw new Error(`Invalid auth type: ${type}`);
       }

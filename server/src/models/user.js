@@ -11,6 +11,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+  },
 });
 
 // Create the user model using the schema

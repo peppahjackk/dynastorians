@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const userService = require("../services/userService");
 const {
   getAuth,
@@ -28,7 +29,13 @@ exports.signUp = async (req, res) => {
     const user = await userService.createUser({
       external_user_id: userCredential.user.uid,
       external_system: "firebase",
+      email,
     });
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    });
+    res.cookie("token", token, { httpOnly: true });
 
     res.status(201).send(user);
   } catch (error) {
@@ -107,6 +114,11 @@ exports.signIn = async (req, res) => {
       externalUserId: userCredential.user.uid,
       externalSystem: "firebase",
     });
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    });
+    res.cookie("token", token, { httpOnly: true });
 
     res.status(200).send(user);
   } catch (error) {
