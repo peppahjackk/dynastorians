@@ -28,7 +28,7 @@ exports.delete = async ({ league_id, id }) => {
   try {
     let roster;
     if (league_id != null) {
-      roster = await Roster.findAndDelete({ league_id });
+      roster = await Roster.findOneAndDelete({ league_id });
     }
 
     if (id != null) {

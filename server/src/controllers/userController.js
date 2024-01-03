@@ -1,12 +1,14 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const userService = require("../services/userService");
+const managerService = require("../services/managerService");
 const {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } = require("firebase/auth");
 const app = require("../initFirebase");
+
 exports.signUp = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -29,7 +31,6 @@ exports.signUp = async (req, res) => {
     const user = await userService.createUser({
       external_user_id: userCredential.user.uid,
       external_system: "firebase",
-      email,
     });
 
     if (!user) throw new Error("User not found");
