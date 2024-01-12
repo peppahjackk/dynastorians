@@ -78,7 +78,7 @@ export const AuthForm = ({
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error);
-        setError(error.message);
+        setError(error.response?.data?.message ?? error.message);
       } else {
         console.error("An unknown error occurred");
         setError("An unknown error occurred");

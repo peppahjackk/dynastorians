@@ -132,6 +132,11 @@ exports.signIn = async (req, res) => {
 
     res.status(200).send(user);
   } catch (error) {
+    if (error.code === "auth/invalid-credential") {
+      return res
+        .status(401)
+        .send({ message: "Error signing in: Incorrect email or password" });
+    }
     res.status(500).send({ message: `Error signing in: ${error.message}` });
   }
 };
