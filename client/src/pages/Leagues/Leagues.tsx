@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLeaguesQuery } from "./queries/useLeaguesQuery";
 import { Layout } from "../../components/Layout";
 import { League } from "./types/league";
+import { useAuth } from "../../features/auth/useAuth";
 
 export const Leagues = () => {
-  const { isLoading, error, data } = useLeaguesQuery();
+  const { user } = useAuth();
+  const { isLoading, error, data } = useLeaguesQuery({ userId: user?._id });
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -29,10 +31,14 @@ export const Leagues = () => {
                 Est. {league.first_season}
               </Typography>
               <Typography variant="subtitle2" color="text.secondary">
-                Platform: {league.external_system.charAt(0).toUpperCase() + league.external_system.slice(1)}
+                Platform:{" "}
+                {league.external_system.charAt(0).toUpperCase() +
+                  league.external_system.slice(1)}
               </Typography>
               <CardActions>
-                <Button size="small" variant="contained">View</Button>
+                <Button size="small" variant="contained">
+                  View
+                </Button>
               </CardActions>
             </Card>
           </Link>

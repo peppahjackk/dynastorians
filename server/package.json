@@ -5,7 +5,7 @@
   "scripts": {
     "start": "yarn start:db && yarn start:server",
     "start:server": "node src/app.js",
-    "start:db": "mongod --dbpath data"
+    "start:db": "mongod --bind_ip_all --dbpath data"
   },
   "repository": "git@github.com:peppahjackk/dynastorians.git",
   "author": "Ted Moke <iam@tedmoke.com>",

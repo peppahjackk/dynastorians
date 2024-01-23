@@ -27,6 +27,7 @@ exports.getLeagueByExternalId = async (external_league_id) => {
 
 exports.getLeagueById = async (id) => {
   try {
+    console.log("trying to get league by id", id);
     const league = await League.findById(id);
     return league;
   } catch (error) {
