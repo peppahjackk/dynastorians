@@ -34,6 +34,15 @@ exports.getLeagueById = async (id) => {
   }
 };
 
+exports.getLeagueByUserId = async (user_id) => {
+  try {
+    const leagues = await League.find({ user_id });
+    return leagues;
+  } catch (error) {
+    throw new Error("Error getting league " + error.message);
+  }
+};
+
 exports.deleteLeague = async ({ id }) => {
   try {
     const league = await League.findOneAndDelete(id);
@@ -56,7 +65,7 @@ exports.getExternalLeaguesForUser = async (externalUserData) => {
   try {
     const { external_system, credentials } = externalUserData;
 
-    console.log('trying to get externalUserData', externalUserData)
+    console.log("trying to get externalUserData", externalUserData);
 
     let externalUser;
     if (external_system === "fleaflicker") {
@@ -65,7 +74,7 @@ exports.getExternalLeaguesForUser = async (externalUserData) => {
       throw new Error("External system not supported");
     }
 
-    console.log('externalUser', externalUser)
+    console.log("externalUser", externalUser);
 
     return externalUser;
   } catch (error) {

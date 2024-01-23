@@ -66,7 +66,7 @@ exports.getExternalLeagues = async (req, res) => {
 };
 
 exports.syncLeague = async (req, res) => {
-  const { id: external_league_id, external_system, sport, name } = req.body;
+  const { id: external_league_id, external_system, sport, name, owned_team_id } = req.body;
   try {
     let league = await leagueService.getLeagueByExternalId(external_league_id);
     let statusCode = 200;

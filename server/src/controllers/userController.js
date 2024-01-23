@@ -1,6 +1,8 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const userService = require("../services/userService");
+const leagueService = require("../services/leagueService");
+const managerService = require("../services/managerService");
 const {
   getAuth,
   createUserWithEmailAndPassword,
@@ -96,6 +98,24 @@ exports.getMe = async (req, res) => {
     res.status(200).send(user);
   } catch (error) {
     res.status(401).send({ message: `Error: ${error.message}` });
+  }
+};
+
+exports.getLeaguesByUserId = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const managers = await managerService.getManagerByUserId(userId);
+
+    // managers.forEach(async (manager) => {
+    //   const league = await leagueService.getLeagueById(manager.league_id);
+    //   manager.league = league;
+    // }
+    // // const leagues = await leagueService.getLeaguesByUserId(userId);
+    // res.status(200).json(leagues);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving user with leagues" });
   }
 };
 

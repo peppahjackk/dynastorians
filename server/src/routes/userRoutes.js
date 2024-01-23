@@ -4,6 +4,7 @@ const userController = require("../controllers/userController");
 
 router.get("/", userController.getAllUsers);
 router.get("/me", userController.getMe)
+router.get("/leagues", userController.getLeaguesByUserId);
 router.get("/:id", userController.getUserById);
 router.post("/signup", userController.signUp);
 router.post("/signin", userController.signIn);

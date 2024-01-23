@@ -26,6 +26,7 @@ const postLeagueSync = async (league: LeagueFF) => {
     name: league.name,
     external_system: "fleaflicker",
     sport: "NFL",
+    owned_team_id: league.owned_team.id
   });
 
   console.log("response", response);
