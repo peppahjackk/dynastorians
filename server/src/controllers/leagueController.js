@@ -1,6 +1,6 @@
 const leagueService = require("../services/leagueService");
 const teamService = require("../services/teamService");
-const rosterService = require("../services/rosterService")
+const rosterService = require("../services/rosterService");
 
 exports.getAllLeagues = async (req, res) => {
   try {
@@ -32,12 +32,14 @@ exports.deleteLeague = async (req, res) => {
     if (!league) {
       res.status(404).send({ message: "League not found" });
     }
-    
-    await teamService.delete({ league_id: id })
-    await rosterService.delete({ league_id: id })
+
+    await teamService.delete({ league_id: id });
+    await rosterService.delete({ league_id: id });
     res.status(200).send({ message: "League deleted successfully" });
   } catch (error) {
-    res.status(500).send({ message: `Error deleting league: ${error.message}` });
+    res
+      .status(500)
+      .send({ message: `Error deleting league: ${error.message}` });
   }
 };
 
@@ -55,7 +57,7 @@ exports.getExternalLeagues = async (req, res) => {
   const externalUserData = req.body;
   try {
     const { leagues } = await leagueService.getExternalLeaguesForUser(
-      externalUserData
+      externalUserData,
     );
     res.status(200).send(leagues);
   } catch (error) {
@@ -66,7 +68,14 @@ exports.getExternalLeagues = async (req, res) => {
 };
 
 exports.syncLeague = async (req, res) => {
-  const { id: external_league_id, external_system, sport, name, owned_team_id } = req.body;
+  const {
+    id: external_league_id,
+    external_system,
+    sport,
+    name,
+    external_owned_team_id,
+    manager_id,
+  } = req.body;
   try {
     let league = await leagueService.getLeagueByExternalId(external_league_id);
     let statusCode = 200;
@@ -79,17 +88,21 @@ exports.syncLeague = async (req, res) => {
         name,
       });
       statusCode = 201;
-      console.log('League created! Id: ', league._id)
+      console.log("League created! Id: ", league._id);
     }
     // TODO validate league is up to date if it already exists
 
     await teamService.syncTeams(league);
     await rosterService.syncRosters(league);
+    await teamService.updateTeam({
+      external_team_id: external_owned_team_id,
+      data: { manager_id },
+    });
 
     res.status(statusCode).json(league);
   } catch (error) {
-    const errorMessage = `An error occurred while connecting the user to the external system: ${error.message}`
-    console.log(errorMessage)
+    const errorMessage = `An error occurred while connecting the user to the external system: ${error.message}`;
+    console.log(errorMessage);
     res.status(500).send({
       error: errorMessage,
     });

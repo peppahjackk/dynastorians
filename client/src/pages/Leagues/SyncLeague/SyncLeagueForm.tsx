@@ -10,6 +10,7 @@ import {
 import { LeagueFF } from "../../../features/external/fleaflicker/fleaflickerTypes";
 import CheckIcon from "@mui/icons-material/Check";
 import { CircularProgress } from "@mui/material";
+import { Manager } from "../../../features/managers/managerTypes";
 
 interface LeagueSyncStatus {
   [key: string]: {
@@ -18,7 +19,7 @@ interface LeagueSyncStatus {
   };
 }
 
-const postLeagueSync = async (league: LeagueFF) => {
+  const postLeagueSync = async ({league, manager}: {league: LeagueFF, manager: Manager}) => {
   console.log("postLeagueSync", league);
 
   const response = await axios.post("/api/leagues/sync", {
@@ -26,7 +27,8 @@ const postLeagueSync = async (league: LeagueFF) => {
     name: league.name,
     external_system: "fleaflicker",
     sport: "NFL",
-    owned_team_id: league.owned_team.id
+    external_owned_team_id: league.ownedTeam.id,
+    manager_id: manager._id,
   });
 
   console.log("response", response);
@@ -48,9 +50,11 @@ const buildSyncStatus = (leagues: LeagueFF[]) => {
 
 export const SyncLeagueForm = ({
   data,
+  manager,
   onComplete,
 }: {
   data: LeagueFF[];
+  manager: Manager;
   onComplete?: () => void;
 }) => {
   const [processing, setProcessing] = useState(false);
@@ -96,17 +100,19 @@ export const SyncLeagueForm = ({
             };
           });
 
-          return postLeagueSync(leagueToSync).then((payload) => {
-            return setLeagueSyncStatus((prev) => {
-              return {
-                ...prev,
-                [leagueToSync.id]: {
-                  status: "success",
-                  message: payload.message,
-                },
-              };
-            });
-          });
+          return postLeagueSync({ league: leagueToSync, manager }).then(
+            (payload) => {
+              return setLeagueSyncStatus((prev) => {
+                return {
+                  ...prev,
+                  [leagueToSync.id]: {
+                    status: "success",
+                    message: payload.message,
+                  },
+                };
+              });
+            },
+          );
         });
       await Promise.all(promises);
 

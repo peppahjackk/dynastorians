@@ -1,10 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import axios from "axios";
-
-type User = {
-  email: string;
-  _id: number;
-};
+import { User } from "./authTypes";
 
 const handleSignOut = async () => {
   return await axios.post("/api/users/signOut");

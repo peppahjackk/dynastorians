@@ -5,7 +5,7 @@ const League = require("../models/league");
 // A Team carries extends over several seasons, while a Roster is only for one year
 exports.syncTeams = async ({ id, external_league_id, external_system }) => {
   try {
-    console.log('Syncing teams...')
+    console.log("Syncing teams...");
     const { rosters: currentExternalRosters } = await getExternalRosters({
       external_system,
       external_league_id,
@@ -29,7 +29,7 @@ exports.syncTeams = async ({ id, external_league_id, external_system }) => {
         const newTeam = new Team(teamInputData);
         teamResource = await newTeam.save();
       } else {
-        await Team.updateOne({ id: teamId }, teamInputData)
+        await Team.updateOne({ id: teamId }, teamInputData);
       }
     }
 
@@ -39,16 +39,25 @@ exports.syncTeams = async ({ id, external_league_id, external_system }) => {
   }
 };
 
-exports.getTeams = async ({ league_id }) => {
+exports.getTeams = async ({ league_id, manager_id }) => {
   try {
-    let teams = await Team.find({ league_id }).exec()
+    const teams = [];
+
+    if (league_id != null) {
+      const teamsByLeague = await Team.find({ league_id });
+      teams.push(...teamsByLeague);
+    }
+
+    if (manager_id != null) {
+      const teamsByManager = await Team.find().where("manager_id").equals(manager_id);
+      teams.push(...teamsByManager);
+    }
 
     return teams;
-
   } catch (error) {
-    throw new Error(`Error fetching teams: ${error.message}`)
+    throw new Error(`Error fetching teams: ${error.message}`);
   }
-}
+};
 
 exports.delete = async ({ league_id, id }) => {
   try {
@@ -58,11 +67,22 @@ exports.delete = async ({ league_id, id }) => {
     }
 
     if (id != null) {
-      team = await Team.findOneAndDelete(id)
+      team = await Team.findOneAndDelete(id);
     }
-    
+
     return team;
   } catch (error) {
     throw new Error("Error deleting league" + error.message);
   }
-}
+};
+
+exports.updateTeam = async ({ id, external_team_id, data }) => {
+  try {
+    const team = await Team.findOneAndUpdate({ id, external_team_id }, data, {
+      new: true,
+    });
+    return team;
+  } catch (error) {
+    throw new Error("Error updating team" + error.message);
+  }
+};

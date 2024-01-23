@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const userService = require("../services/userService");
 const leagueService = require("../services/leagueService");
 const managerService = require("../services/managerService");
+const teamService = require("../services/teamService");
 const {
   getAuth,
   createUserWithEmailAndPassword,
@@ -106,12 +107,20 @@ exports.getLeaguesByUserId = async (req, res) => {
   try {
     const managers = await managerService.getManagerByUserId(userId);
 
-    // managers.forEach(async (manager) => {
-    //   const league = await leagueService.getLeagueById(manager.league_id);
-    //   manager.league = league;
-    // }
-    // // const leagues = await leagueService.getLeaguesByUserId(userId);
-    // res.status(200).json(leagues);
+    const leagueIds = await Promise.all(
+      managers.map(async (manager) => {
+        const teams = await teamService.getTeams({ manager_id: manager.id });
+        return teams.map((team) => team.league_id);
+      }),
+    );
+
+    const leagues = await Promise.all(
+      leagueIds.map(async (leagueId) => {
+        const league = await leagueService.getLeagueById(leagueId);
+        return league;
+      }),
+    );
+    res.status(200).json(leagues);
   } catch (error) {
     res
       .status(500)

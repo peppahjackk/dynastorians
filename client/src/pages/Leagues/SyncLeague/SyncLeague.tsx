@@ -87,7 +87,7 @@ export const SyncLeague = () => {
         />
       )}
       {data && (
-        <SyncLeagueForm data={data} onComplete={() => navigate("/leagues")} />
+        <SyncLeagueForm data={data} manager={managersObject} onComplete={() => navigate("/leagues")} />
       )}
     </Layout>
   );
