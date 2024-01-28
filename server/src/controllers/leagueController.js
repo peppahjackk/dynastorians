@@ -77,6 +77,25 @@ exports.syncLeague = async (req, res) => {
     manager_id,
   } = req.body;
   try {
+    if (!external_league_id) {
+      throw new Error("External league id is required");
+    }
+    if (!external_system) {
+      throw new Error("External system is required");
+    }
+    if (!sport) {
+      throw new Error("Sport is required");
+    }
+    if (!name) {
+      throw new Error("Name is required");
+    }
+    if (!external_owned_team_id) {
+      throw new Error("External owned team id is required");
+    }
+    if (!manager_id) {
+      throw new Error("Manager id is required");
+    }
+
     let league = await leagueService.getLeagueByExternalId(external_league_id);
     let statusCode = 200;
     if (!league) {

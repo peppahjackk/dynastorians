@@ -110,13 +110,13 @@ exports.getLeaguesByUserId = async (req, res) => {
 
     const leagueIds = await Promise.all(
       managers.map(async (manager) => {
-        const teams = await teamService.getTeams({ manager_id: manager.id });
+        const teams = await teamService.getTeams({ manager_id: manager._id });
         return teams.map((team) => team.league_id);
       }),
-    );
+    )
 
     const leagues = await Promise.all(
-      leagueIds.map(async (leagueId) => {
+      leagueIds.flat().map(async (leagueId) => {
         const league = await leagueService.getLeagueById(leagueId);
         return league;
       }),
