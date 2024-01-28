@@ -18,7 +18,7 @@ function addManager({
   externalSystem: string;
   email?: string;
   username?: string;
-}): Promise<Manager[]> {
+}): Promise<Manager> {
   return axios
     .post(`/api/manager`, {
       user_id: userId,

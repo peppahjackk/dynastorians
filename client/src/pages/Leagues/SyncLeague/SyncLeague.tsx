@@ -29,9 +29,10 @@ export const SyncLeague = () => {
   const managerObject = managersData
     ? managersData.find((manager: Manager) => manager._id === selectedManager)
     : null;
-  const { data, isLoading, error } = useUserLeaguesFFQuery({
+  const { data, error } = useUserLeaguesFFQuery({
     email: managerObject?.email ?? undefined,
   });
+
   const navigate = useNavigate();
 
   if (user == null) {
@@ -59,7 +60,7 @@ export const SyncLeague = () => {
         </span>
       </Typography>
       <FormControl fullWidth>
-        {managersData && managersData.length >= 0 && !newManagerMode && (
+        {managersData && managersData.length > 0 && !newManagerMode && (
           <Select
             value={selectedManager}
             onChange={(e) => setSelectedManager(e.target.value)}
@@ -75,19 +76,24 @@ export const SyncLeague = () => {
           </Select>
         )}
       </FormControl>
-      {selectedManager && newManagerMode && (
+      {((selectedManager && newManagerMode) ||
+        (managersData && managersData.length === 0)) && (
         <AddNewManager
           userId={user._id.toString()}
           externalSystem="fleaflicker"
           onCancel={() => setSelectedManager("")}
-          onComplete={() => {
+          onComplete={(newManager: Manager): void => {
             refetchManagers();
-            setSelectedManager("");
+            setSelectedManager(newManager ? newManager._id : "");
           }}
         />
       )}
-      {data && (
-        <SyncLeagueForm data={data} manager={managersObject} onComplete={() => navigate("/leagues")} />
+      {data && managerObject && (
+        <SyncLeagueForm
+          data={data}
+          manager={managerObject}
+          onComplete={() => navigate("/leagues")}
+        />
       )}
     </Layout>
   );
