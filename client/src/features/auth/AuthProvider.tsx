@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { User } from "./authTypes";
 
 const handleSignOut = async () => {
@@ -22,7 +22,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const response = await axios.get("/api/users/me");
         setUser(response.data);
       } catch (error) {
-        console.error("Error checking user", error);
+        if (error instanceof AxiosError && error.response?.status !== 401) {
+          console.error("Error checking user", error);
+        }
       } finally {
         setLoading(false);
       }

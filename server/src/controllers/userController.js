@@ -44,6 +44,7 @@ exports.signUp = async (req, res) => {
 
     res.status(201).send(user);
   } catch (error) {
+    console.log('error', error)
     res.status(500).send({
       error: "An error occurred while creating the user" + error.message,
     });

@@ -17,7 +17,7 @@ const signUp = async ({
   email: string;
   password: string;
 }) => {
-  const response = await axios.post("/api/users/signUp", {
+  const response = await axios.post("/api/users/signup", {
     email,
     password,
   });
@@ -32,7 +32,7 @@ const signIn = async ({
   email: string;
   password: string;
 }) => {
-  const response = await axios.post("/api/users/signIn", {
+  const response = await axios.post("/api/users/signin", {
     email,
     password,
   });
