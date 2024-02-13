@@ -4,6 +4,7 @@ export interface Team {
   external_team_id: string;
   rosters: Roster[];
   stats: Stats;
+  manager_id: string;
 }
 
 export interface Roster {

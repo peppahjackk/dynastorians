@@ -1,4 +1,5 @@
 const Manager = require("../models/manager"); // Import the Manager model
+const teamService = require("./teamService"); // Import the team service
 
 // Function to create a new manager
 exports.createManager = async (managerData) => {
@@ -11,9 +12,27 @@ exports.createManager = async (managerData) => {
   }
 };
 
-exports.getManagerByUserId = async (user_id) => {
+exports.getManager = async ({ user_id, league_id }) => {
   try {
-    const manager = await Manager.find().where("user_id").equals(user_id);
+    const filter = {};
+    if (user_id) {
+      filter.user_id = user_id;
+    }
+    const manager = await Manager.find(filter).exec();
+
+    if (league_id) {
+      const teamForManager = await teamService.getTeam({
+        manager_id: manager._id,
+        league_id: 12378,
+      });
+
+      if (teamForManager) {
+        return manager;
+      } else {
+        return [];
+      }
+    }
+
     return manager;
   } catch (error) {
     throw new Error("Error retrieving manager with leagues" + error.message);

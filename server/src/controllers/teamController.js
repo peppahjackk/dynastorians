@@ -34,6 +34,7 @@ exports.getTeams = async (req, res) => {
           _id: team._id,
           league_id: team.league_id,
           external_team_id: team.external_league_id,
+          manager_id: team.manager_id,
           rosters,
           stats,
         };

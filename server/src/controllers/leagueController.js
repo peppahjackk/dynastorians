@@ -111,7 +111,10 @@ exports.syncLeague = async (req, res) => {
     }
     // TODO validate league is up to date if it already exists
 
-    await teamService.syncTeams(league);
+    await teamService.syncTeams({
+      league: league,
+      manager: { id: manager_id, external_owned_team_id },
+    });
     await rosterService.syncRosters(league);
     await teamService.updateTeam({
       external_team_id: external_owned_team_id,

@@ -2,9 +2,15 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Manager } from "./managerTypes";
 
-function fetchUserManagers({ userId }: { userId: string }): Promise<Manager[]> {
+function fetchUserManagers({
+  userId,
+  leagueId = null,
+}: {
+  userId: string;
+  leagueId: string | null;
+}): Promise<Manager[]> {
   return axios
-    .get(`/api/manager?user_id=${userId}`)
+    .get(`/api/manager?user_id=${userId}&league_id=${leagueId}`)
     .then((response) => response.data);
 }
 
@@ -29,11 +35,11 @@ function addManager({
     .then((response) => response.data);
 }
 
-export function useManagersQuery({ userId }: { userId?: string }) {
+export function useManagersQuery({ userId, leagueId }: { userId: string | null, leagueId: string | null }) {
   return useQuery({
-    queryKey: ["manager", userId],
+    queryKey: ["manager", userId, leagueId],
     enabled: userId == null ? false : true,
-    queryFn: () => fetchUserManagers({ userId }),
+    queryFn: () => fetchUserManagers({ userId, leagueId}),
   });
 }
 

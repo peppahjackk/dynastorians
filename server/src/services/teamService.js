@@ -3,9 +3,18 @@ const Team = require("../models/team");
 const League = require("../models/league");
 
 // A Team carries extends over several seasons, while a Roster is only for one year
-exports.syncTeams = async ({ id, external_league_id, external_system }) => {
+exports.syncTeams = async ({ league, manager }) => {
   try {
-    console.log("Syncing teams...");
+    const { id: league_id, external_league_id, external_system } = league;
+    const { id: manager_id, external_owned_team_id } = manager;
+
+    if (!external_league_id) {
+      throw new Error("External league id is required");
+    }
+    if (!external_system) {
+      throw new Error("External system is required");
+    }
+
     const { rosters: currentExternalRosters } = await getExternalRosters({
       external_system,
       external_league_id,
@@ -15,13 +24,14 @@ exports.syncTeams = async ({ id, external_league_id, external_system }) => {
       const { id: teamId } = externalRoster.team;
 
       const teamInputData = {
-        league_id: id,
+        league_id,
         external_team_id: teamId,
+        manager_id: teamId === external_owned_team_id ? manager_id : null,
       };
 
       let teamResource = await Team.findOne()
         .where("league_id")
-        .equals(id)
+        .equals(league_id)
         .where("external_team_id")
         .equals(externalRoster.team.id);
 
@@ -39,6 +49,23 @@ exports.syncTeams = async ({ id, external_league_id, external_system }) => {
   }
 };
 
+exports.getTeam = async ({ league_id, manager_id }) => {
+  try {
+    const filter = {};
+    if (league_id) {
+      filter.league_id = league_id;
+    }
+    if (manager_id) {
+      filter.manager_id = manager_id;
+    }
+    const team = await Team.find(filter).exec();
+
+    return team;
+  } catch (error) {
+    throw new Error(`Error fetching teams: ${error.message}`);
+  }
+};
+
 exports.getTeams = async ({ league_id, manager_id }) => {
   try {
     const teams = [];
@@ -49,7 +76,9 @@ exports.getTeams = async ({ league_id, manager_id }) => {
     }
 
     if (manager_id != null) {
-      const teamsByManager = await Team.find().where("manager_id").equals(manager_id);
+      const teamsByManager = await Team.find()
+        .where("manager_id")
+        .equals(manager_id);
       teams.push(...teamsByManager);
     }
 

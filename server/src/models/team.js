@@ -13,7 +13,6 @@ const teamSchema = new mongoose.Schema({
   },
   manager_id: {
     type: String,
-    required: true,
   },
 });
 

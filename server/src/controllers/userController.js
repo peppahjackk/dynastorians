@@ -44,7 +44,7 @@ exports.signUp = async (req, res) => {
 
     res.status(201).send(user);
   } catch (error) {
-    console.log('error', error)
+    console.log("error", error);
     res.status(500).send({
       error: "An error occurred while creating the user" + error.message,
     });
@@ -104,16 +104,16 @@ exports.getMe = async (req, res) => {
 };
 
 exports.getLeaguesByUserId = async (req, res) => {
-  const userId = req.params.id;
+  const user_id = req.params.id;
   try {
-    const managers = await managerService.getManagerByUserId(userId);
+    const managers = await managerService.getManager({ user_id });
 
     const leagueIds = await Promise.all(
       managers.map(async (manager) => {
         const teams = await teamService.getTeams({ manager_id: manager._id });
         return teams.map((team) => team.league_id);
       }),
-    )
+    );
 
     const leagues = await Promise.all(
       leagueIds.flat().map(async (leagueId) => {

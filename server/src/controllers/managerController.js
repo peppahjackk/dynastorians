@@ -31,11 +31,13 @@ exports.createManager = async (req, res) => {
 
 exports.getManagers = async (req, res) => {
   try {
-    console.log(req.query);
-    const { user_id } = req.query;
+    const { user_id, league_id } = req.query;
 
-    console.log("user_id", user_id);
-    const managers = await managerService.getManagerByUserId(user_id);
+    if (!user_id || !league_id) {
+      throw new Error("User id or League id is required");
+    }
+
+    const managers = await managerService.getManager({user_id, league_id});
     res.status(200).json(managers);
   } catch (error) {
     res.status(500).json({
