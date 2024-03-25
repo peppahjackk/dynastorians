@@ -12,6 +12,8 @@ const columns: GridColDef[] = [
     width: 35,
     valueGetter: (params) =>
       params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
+    cellClassName: (params: GridCellParams) =>
+      params.row.userIsManager ? "my-team" : "not-me",
   },
   {
     field: "id",
@@ -26,6 +28,8 @@ const columns: GridColDef[] = [
     headerName: "Average Points",
     width: 150,
     valueGetter: ({ row }) => row?.stats?.averagePoints?.toFixed(2),
+    cellClassName: (params: GridCellParams) =>
+      params.row.userIsManager ? "my-team" : "not-me",
   },
   {
     field: "bestRecord",
@@ -33,18 +37,24 @@ const columns: GridColDef[] = [
     width: 150,
     valueGetter: ({ row }) =>
       `${row.stats.bestRecord.wins}-${row.stats.bestRecord.losses}  (${row.stats.bestRecord.season})`,
+    cellClassName: (params: GridCellParams) =>
+      params.row.userIsManager ? "my-team" : "not-me",
   },
   {
     field: "winPct",
     headerName: "Win %",
     width: 100,
     valueGetter: ({ row }) => (row.stats.winPct * 100).toFixed(2) + "%",
+    cellClassName: (params: GridCellParams) =>
+      params.row.userIsManager ? "my-team" : "not-me",
   },
   {
     field: "record",
     headerName: "Record",
     width: 100,
     valueGetter: ({ row }) => `${row.stats.wins}-${row.stats.losses}`,
+    cellClassName: (params: GridCellParams) =>
+      params.row.userIsManager ? "my-team" : "not-me",
   },
 ];
 
@@ -102,7 +112,8 @@ export const Standings = ({
       spacing={2}
       sx={{
         "& .my-team": {
-          backgroundColor: "gray",
+          backgroundColor: "rgb(0, 0, 0, 0.5)",
+          fontWeight: "bold",
         },
       }}
     >

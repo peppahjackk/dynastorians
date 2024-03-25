@@ -4,25 +4,24 @@ const { getCurrentSeason, getExternalRosters } = require("../utils/generic");
 
 exports.getRosters = async ({ league_id, team_id, season }) => {
   try {
-    const searchParams = {}
+    const searchParams = {};
     if (league_id != null) {
-      searchParams.league_id = league_id
+      searchParams.league_id = league_id;
     }
     if (team_id != null) {
-      searchParams.team_id = team_id
+      searchParams.team_id = team_id;
     }
     if (season != null) {
-      searchParams.season = season
+      searchParams.season = season;
     }
 
     let rosters = await Roster.find(searchParams).exec();
 
     return rosters;
-
   } catch (error) {
-    throw new Error(`Error fetching rosters: ${error.message}`)
+    throw new Error(`Error fetching rosters: ${error.message}`);
   }
-}
+};
 
 exports.delete = async ({ league_id, id }) => {
   try {
@@ -32,26 +31,31 @@ exports.delete = async ({ league_id, id }) => {
     }
 
     if (id != null) {
-      roster = await Roster.findOneAndDelete(id)
+      roster = await Roster.findOneAndDelete(id);
     }
 
     return roster;
   } catch (error) {
     throw new Error("Error deleting league" + error.message);
   }
-}
+};
 
 const updateRoster = async ({ league_id, externalRoster, season }) => {
   try {
     if (!league_id || !externalRoster || !season) {
       throw new Error(
-        `Missing required params for updateRoster: season: ${season}, league_id: ${league_id}, externalRoster: ${externalRoster}`
+        `Missing required params for updateRoster: season: ${season}, league_id: ${league_id}, externalRoster: ${externalRoster}`,
       );
     }
-    console.log(`Updating roster ${externalRoster.team.name} (${externalRoster.team.id}) for season ${season}`)
 
-    let roster = await Roster.findOne({ 'external_roster_id': externalRoster.team.id, season }).exec();
-    const teamInternal = await Team.findOne({ league_id, external_team_id: externalRoster.team.id })
+    let roster = await Roster.findOne({
+      external_roster_id: externalRoster.team.id,
+      season,
+    }).exec();
+    const teamInternal = await Team.findOne({
+      league_id,
+      external_team_id: externalRoster.team.id,
+    });
 
     let updatedRoster;
     const rosterPayload = {
@@ -65,7 +69,7 @@ const updateRoster = async ({ league_id, externalRoster, season }) => {
       placement: externalRoster.team.recordOverall.rank,
       wins: externalRoster.team.recordOverall.wins ?? 0,
       losses: externalRoster.team.recordOverall.losses ?? 0,
-    }
+    };
 
     if (!roster || roster.length === 0) {
       const newRoster = new Roster(rosterPayload);
@@ -80,27 +84,41 @@ const updateRoster = async ({ league_id, externalRoster, season }) => {
   }
 };
 
-exports.syncRosters = async ({ _id: id, external_league_id, external_system, first_season }) => {
+exports.syncRosters = async ({
+  _id: id,
+  external_league_id,
+  external_system,
+  first_season,
+}) => {
   try {
-    console.log('Syncing rosters...')
+    console.log("Syncing rosters...");
     if (!external_league_id || !external_system || !first_season || !id) {
-      throw new Error(`Missing required params for syncRosters: id: ${id}, first_season: ${first_season}, external_system: ${external_system}, external_league_id: ${external_league_id}`
-      )
+      throw new Error(
+        `Missing required params for syncRosters: id: ${id}, first_season: ${first_season}, external_system: ${external_system}, external_league_id: ${external_league_id}`,
+      );
     }
     const currentSeason = getCurrentSeason();
     let seasonInCycle = currentSeason;
     let seasonInCycleNeedsSync = true;
 
     while (seasonInCycle >= first_season && seasonInCycleNeedsSync) {
-      const rostersInternal = Roster.find({ seasonInCycle, league_id: id })
+      const rostersInternal = Roster.find({ seasonInCycle, league_id: id });
       if (rostersInternal.length > 0 && seasonInCycle != currentSeason) {
         seasonInCycleNeedsSync = false;
-        return
+        return;
       }
 
-      const externalLeague = await getExternalRosters({ external_system, external_league_id, season: seasonInCycle })
+      const externalLeague = await getExternalRosters({
+        external_system,
+        external_league_id,
+        season: seasonInCycle,
+      });
       for (const externalRoster of externalLeague.rosters) {
-        await updateRoster({ externalRoster, season: seasonInCycle, league_id: id })
+        await updateRoster({
+          externalRoster,
+          season: seasonInCycle,
+          league_id: id,
+        });
       }
 
       seasonInCycle--;
@@ -110,9 +128,9 @@ exports.syncRosters = async ({ _id: id, external_league_id, external_system, fir
   } catch (error) {
     throw new Error("Error syncing rosters: " + error.message);
   }
-}
+};
 
-exports.generateStats = (rosters => {
+exports.generateStats = (rosters) => {
   const currentSeason = getCurrentSeason();
 
   const stats = {
@@ -121,28 +139,31 @@ exports.generateStats = (rosters => {
     bestRecord: {
       wins: null,
       losses: null,
-      season: null
-    }
-  }
+      season: null,
+      winPct: 0,
+    },
+  };
 
   let totalPoints = 0;
   rosters.forEach(({ wins, losses, pointsFor, season }) => {
-    stats.wins += wins
-    stats.losses += losses
-    totalPoints += pointsFor
+    stats.wins += wins;
+    stats.losses += losses;
+    totalPoints += pointsFor;
 
     const winPct = wins / (wins + losses);
 
-    if (season != currentSeason && (stats.bestRecord.wins === null || winPct > stats.bestRecord.winPct)) {
+    const seasonComplete = season !== currentSeason || wins + losses === 14;
+
+    if (seasonComplete && winPct > stats.bestRecord.winPct) {
       stats.bestRecord.wins = wins;
       stats.bestRecord.losses = losses;
       stats.bestRecord.season = season;
       stats.bestRecord.winPct = winPct;
     }
-  })
+  });
 
   stats.winPct = stats.wins / (stats.wins + stats.losses);
-  stats.averagePoints = totalPoints / (stats.wins + stats.losses)
+  stats.averagePoints = totalPoints / (stats.wins + stats.losses);
 
-  return stats
-})
+  return stats;
+};
