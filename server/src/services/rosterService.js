@@ -64,9 +64,9 @@ const updateRoster = async ({ league_id, externalRoster, season }) => {
       season,
       team_name: externalRoster.team.name,
       league_id,
-      pointsFor: externalRoster.team.pointsFor.value,
-      pointsAgainst: externalRoster.team.pointsAgainst.value,
-      placement: externalRoster.team.recordOverall.rank,
+      pointsFor: externalRoster.team.pointsFor.value ?? 0,
+      pointsAgainst: externalRoster.team.pointsAgainst.value ?? 0,
+      placement: externalRoster.team.recordOverall.rank ?? 0,
       wins: externalRoster.team.recordOverall.wins ?? 0,
       losses: externalRoster.team.recordOverall.losses ?? 0,
     };
