@@ -8,7 +8,7 @@ function fetchLeagues({ userId }: { userId?: number }): Promise<League[]> {
 }
 
 // ✅ data will be `League[] | undefined` here
-export function useLeaguesQuery({ userId }: { userId?: number }) {
+export function useLeaguesQuery({ userId }: { userId?: string }) {
   return useQuery({
     queryKey: ["leagues", userId],
     queryFn: () => fetchLeagues({ userId }),

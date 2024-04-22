@@ -17,6 +17,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import { SidebarUserSection } from "../features/auth/SidebarUserSection";
+import { SidebarLeagueSection } from "../pages/Leagues/SidebarLeagueSection";
 import { Logo } from "../assets/Logo";
 
 const drawerWidth = 240;
@@ -62,6 +63,7 @@ export const Layout = ({
               <ListItemText primary="Leagues" />
             </ListItemButton>
           </ListItem>
+          <SidebarLeagueSection />
         </List>
         <Divider />
       </div>
